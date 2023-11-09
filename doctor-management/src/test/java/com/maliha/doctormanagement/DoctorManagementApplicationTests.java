@@ -1,10 +1,10 @@
-package com.example.demo;
+package com.maliha.doctormanagement;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserManagementApplicationTests {
+class DoctorManagementApplicationTests {
 
 	@Test
 	void contextLoads() {

@@ -1,6 +1,7 @@
-package com.example.demo.repository;
+package com.maliha.doctormanagement.repository;
 
-import com.example.demo.entity.DepartmentEntity;
+
+import com.maliha.doctormanagement.entity.DepartmentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DepartmentRepository extends JpaRepository<DepartmentEntity,Long> {

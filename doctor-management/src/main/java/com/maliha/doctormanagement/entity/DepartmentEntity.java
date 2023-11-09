@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.maliha.doctormanagement.entity;
 
 import jakarta.persistence.*;
 
@@ -10,9 +10,11 @@ public class DepartmentEntity {
     private Long id;
     private String name;
     private String description;
+
+    private Integer floorNo;
     public DepartmentEntity() {
     }
-    public DepartmentEntity(Long id, String name, String description) {
+    public DepartmentEntity(Long id, String name, String description,Integer floorNo) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -40,5 +42,13 @@ public class DepartmentEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getFloorNo() {
+        return floorNo;
+    }
+
+    public void setFloorNo(Integer floorNo) {
+        this.floorNo = floorNo;
     }
 }

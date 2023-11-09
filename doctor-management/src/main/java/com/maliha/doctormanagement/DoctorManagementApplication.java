@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.maliha.doctormanagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class UserManagementApplication {
+public class DoctorManagementApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UserManagementApplication.class, args);
+		SpringApplication.run(DoctorManagementApplication.class, args);
 	}
 
 }

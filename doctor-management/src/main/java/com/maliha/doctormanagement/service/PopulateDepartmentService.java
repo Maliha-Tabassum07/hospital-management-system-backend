@@ -1,7 +1,7 @@
-package com.example.demo.service;
+package com.maliha.doctormanagement.service;
 
-import com.example.demo.entity.DepartmentEntity;
-import com.example.demo.repository.DepartmentRepository;
+import com.maliha.doctormanagement.entity.DepartmentEntity;
+import com.maliha.doctormanagement.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class PopulateDepartmentService {
