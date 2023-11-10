@@ -10,10 +10,95 @@ public class PopulateDepartmentService {
     private DepartmentRepository departmentRepository;
 
     public Boolean populateDepartment(){
-//        if (departmentRepository.existsById(1l)){
-//            return false;
-//        }
+        if (departmentRepository.existsById(1l)){
+            return false;
+        }
         DepartmentEntity departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
+        departmentEntity.setName("CARDIOLOGY");
+        departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
+        departmentRepository.save(departmentEntity);
+
+        departmentEntity=new DepartmentEntity();
         departmentEntity.setName("CARDIOLOGY");
         departmentEntity.setDescription("With the help of State-of-the-heart-technology, equipment and monitoring devices, our cardiologists are providing excellent heart care to all the patients.");
         departmentRepository.save(departmentEntity);

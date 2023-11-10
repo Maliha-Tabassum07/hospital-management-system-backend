@@ -1,46 +1,34 @@
-package com.maliha.doctormanagement.entity;
+package com.maliha.doctormanagement.model;
 
-import jakarta.persistence.*;
+import com.maliha.doctormanagement.entity.DepartmentEntity;
+import com.maliha.doctormanagement.entity.DesignationEntity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
 
 import java.util.List;
 
-@Entity
-@Table(name = "doctor")
-public class DoctorEntity {
-    @Id
+public class DoctorDTO {
     private String id;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Transient
-    private Long numericId;
-
     private String name;
+    @NotBlank(message = "Your Id cannot be null")
+    @Email(message = "Email must be a valid email address")
     private String email;
+    @NotBlank(message = "Password cannot be null")
     private String password;
-    private String role;
     private String address;
     private String imageUrl;
     private String qualification;
-    @ManyToOne
     private DepartmentEntity department;
-    @ManyToOne
-    private  DesignationEntity designation;
-    @ManyToMany
+    private DesignationEntity designation;
     private List<DepartmentEntity> specialty;
-
-    @PrePersist
-    private void generateCustomId() {
-        String prefix = "D";
-        String formattedId = String.format("%s%02d", prefix, numericId);
-        setId(formattedId);
+    public DoctorDTO() {
     }
 
-    public DoctorEntity(String id, Long numericId, String name, String email, String password, String role, String address, String imageUrl, String qualification, DepartmentEntity department, DesignationEntity designation, List<DepartmentEntity> specialty) {
+    public DoctorDTO(String id,String name, String email, String password, String address, String imageUrl, String qualification, DepartmentEntity department, DesignationEntity designation, List<DepartmentEntity> specialty) {
         this.id = id;
-        this.numericId = numericId;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = role;
         this.address = address;
         this.imageUrl = imageUrl;
         this.qualification = qualification;
@@ -49,7 +37,12 @@ public class DoctorEntity {
         this.specialty = specialty;
     }
 
-    public DoctorEntity() {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -75,15 +68,6 @@ public class DoctorEntity {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -130,21 +114,5 @@ public class DoctorEntity {
 
     public void setSpecialty(List<DepartmentEntity> specialty) {
         this.specialty = specialty;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Long getNumericId() {
-        return numericId;
-    }
-
-    public void setNumericId(Long numericId) {
-        this.numericId = numericId;
     }
 }
