@@ -18,13 +18,14 @@ public class DoctorDTO {
     private String address;
     private String imageUrl;
     private String qualification;
+    private String role;
     private DepartmentEntity department;
     private DesignationEntity designation;
     private List<DepartmentEntity> specialty;
     public DoctorDTO() {
     }
 
-    public DoctorDTO(String id,String name, String email, String password, String address, String imageUrl, String qualification, DepartmentEntity department, DesignationEntity designation, List<DepartmentEntity> specialty) {
+    public DoctorDTO(String id, String name, String email, String password, String address, String imageUrl, String qualification, String role, DepartmentEntity department, DesignationEntity designation, List<DepartmentEntity> specialty) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -32,6 +33,7 @@ public class DoctorDTO {
         this.address = address;
         this.imageUrl = imageUrl;
         this.qualification = qualification;
+        this.role = role;
         this.department = department;
         this.designation = designation;
         this.specialty = specialty;
@@ -51,6 +53,14 @@ public class DoctorDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getEmail() {
