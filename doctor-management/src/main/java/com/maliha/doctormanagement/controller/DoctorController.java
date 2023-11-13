@@ -17,14 +17,14 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody DoctorDTO userDto) throws Exception {
+    public ResponseEntity<?> register(@RequestBody DoctorDTO doctorDto) throws Exception {
         try {
-            DoctorDTO createdUser = doctorService.createUser(userDto);
+            DoctorDTO createdDoctor = doctorService.createUser(doctorDto);
             List<String> roles = new ArrayList<String>();
-            roles.add("ROLE_" + createdUser.getRole());
+            roles.add("ROLE_" + createdDoctor.getRole());
 
-            String accessToken = JWTUtils.generateToken(createdUser.getEmail(), roles);
-            UserRegistrationResponse response = new UserRegistrationResponse(createdUser, accessToken);
+            String accessToken = JWTUtils.generateToken(createdDoctor.getEmail(), roles);
+            UserRegistrationResponse response = new UserRegistrationResponse(createdDoctor, accessToken);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

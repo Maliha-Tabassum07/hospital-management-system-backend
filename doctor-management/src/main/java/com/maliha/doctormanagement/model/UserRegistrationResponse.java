@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserRegistrationResponse {
-    private DoctorDTO userDto;
+    private DoctorDTO doctorDto;
     private String token;
 
-    public UserRegistrationResponse(DoctorDTO userDto, String token) {
-        this.userDto = userDto;
+    public UserRegistrationResponse(DoctorDTO doctorDto, String token) {
+        this.doctorDto = doctorDto;
         this.token = token;
     }
 

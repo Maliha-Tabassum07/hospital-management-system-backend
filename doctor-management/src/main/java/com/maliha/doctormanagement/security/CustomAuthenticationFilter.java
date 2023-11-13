@@ -42,7 +42,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Autowired
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        setFilterProcessesUrl("/users/login");
+        setFilterProcessesUrl("/doctor/login");
     }
 
     @Override
