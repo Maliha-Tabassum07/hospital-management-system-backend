@@ -3,15 +3,16 @@ package com.maliha.doctormanagement.entity;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Entity
 @Table(name = "doctor")
 public class DoctorEntity {
-    @Id
     private String id;
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Transient
-    private Long numericId;
+    private Integer numericId;
 
     private String name;
     private String email;
@@ -27,14 +28,9 @@ public class DoctorEntity {
     @ManyToMany
     private List<DepartmentEntity> specialty;
 
-    @PrePersist
-    private void generateCustomId() {
-        String prefix = "D";
-        String formattedId = String.format("%s%02d", prefix, numericId);
-        setId(formattedId);
+    public DoctorEntity() {
     }
-
-    public DoctorEntity(String id, Long numericId, String name, String email, String password, String role, String address, String imageUrl, String qualification, DepartmentEntity department, DesignationEntity designation, List<DepartmentEntity> specialty) {
+    public DoctorEntity(String id, Integer numericId, String name, String email, String password, String role, String address, String imageUrl, String qualification, DepartmentEntity department, DesignationEntity designation, List<DepartmentEntity> specialty) {
         this.id = id;
         this.numericId = numericId;
         this.name = name;
@@ -49,8 +45,8 @@ public class DoctorEntity {
         this.specialty = specialty;
     }
 
-    public DoctorEntity() {
-    }
+
+
 
     public String getName() {
         return name;
@@ -140,11 +136,11 @@ public class DoctorEntity {
         this.id = id;
     }
 
-    public Long getNumericId() {
+    public Integer getNumericId() {
         return numericId;
     }
 
-    public void setNumericId(Long numericId) {
+    public void setNumericId(Integer numericId) {
         this.numericId = numericId;
     }
 }

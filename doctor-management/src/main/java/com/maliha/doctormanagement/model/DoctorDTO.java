@@ -19,13 +19,13 @@ public class DoctorDTO {
     private String imageUrl;
     private String qualification;
     private String role;
-    private DepartmentEntity department;
-    private DesignationEntity designation;
-    private List<DepartmentEntity> specialty;
+    private Long department;
+    private Long designation;
+    private List<Long> specialty;
     public DoctorDTO() {
     }
 
-    public DoctorDTO(String id, String name, String email, String password, String address, String imageUrl, String qualification, String role, DepartmentEntity department, DesignationEntity designation, List<DepartmentEntity> specialty) {
+    public DoctorDTO(String id, String name, String email, String password, String address, String imageUrl, String qualification, String role, Long department, Long designation, List<Long> specialty) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -102,27 +102,27 @@ public class DoctorDTO {
         this.qualification = qualification;
     }
 
-    public DepartmentEntity getDepartment() {
+    public Long getDepartment() {
         return department;
     }
 
-    public void setDepartment(DepartmentEntity department) {
+    public void setDepartment(Long department) {
         this.department = department;
     }
 
-    public DesignationEntity getDesignation() {
+    public Long getDesignation() {
         return designation;
     }
 
-    public void setDesignation(DesignationEntity designation) {
+    public void setDesignation(Long designation) {
         this.designation = designation;
     }
 
-    public List<DepartmentEntity> getSpecialty() {
+    public List<Long> getSpecialty() {
         return specialty;
     }
 
-    public void setSpecialty(List<DepartmentEntity> specialty) {
+    public void setSpecialty(List<Long> specialty) {
         this.specialty = specialty;
     }
 }

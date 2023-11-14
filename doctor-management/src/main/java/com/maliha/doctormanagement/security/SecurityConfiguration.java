@@ -28,8 +28,8 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/users/register", "/users/login").permitAll()
-                        .requestMatchers("/users/createProfile").hasAuthority("USER")
+                        .requestMatchers("/doctor/login").permitAll()
+                        .requestMatchers("/doctor/register","/department/populate","/designation/populate").hasAuthority("ADMIN")
                         .requestMatchers("/users/getProfileById").hasAuthority("USER")
                         .requestMatchers("/users/health-data").hasAuthority("USER")
                         .requestMatchers("/users/createHealthDAta").hasAuthority("USER")

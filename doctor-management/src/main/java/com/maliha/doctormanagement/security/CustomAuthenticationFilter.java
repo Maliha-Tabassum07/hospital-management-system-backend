@@ -33,12 +33,11 @@ import java.util.Map;
 
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
-
     private final AuthenticationManager authenticationManager;
 
     @Autowired
     private DoctorRepository doctorRepository;
+
     @Autowired
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;

@@ -1,7 +1,6 @@
 package com.maliha.doctormanagement.controller;
 
-import com.maliha.doctormanagement.service.DoctorService;
-import com.maliha.doctormanagement.service.PopulateDepartmentService;
+import com.maliha.doctormanagement.service.PopulateDesignationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,18 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/department")
-public class DepartmentController {
+@RequestMapping("/designation")
+public class DesignationController {
     @Autowired
-    private PopulateDepartmentService populateDepartmentService;
+    private PopulateDesignationService populateDesignationService;
 
     @GetMapping("/populate")
-    public ResponseEntity<?> populateDepartment( ){
+    public ResponseEntity<?> populateDesignation( ){
 
-        if(populateDepartmentService.populateDepartment()){
-            System.out.println("Controller");
+        if(populateDesignationService.populateDesignation()){
             return new ResponseEntity<>("Database populated", HttpStatus.ACCEPTED);}
         return new ResponseEntity<>("Cannot perform this action", HttpStatus.FORBIDDEN);
     }
-
 }
