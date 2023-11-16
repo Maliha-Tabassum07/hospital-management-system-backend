@@ -10,7 +10,7 @@ public class AppointmentBookingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String patientId;
+    private Integer patientId;
     private LocalTime presentDate;
     @ManyToOne
     private AppointmentSlotEntity appointmentSlotEntity;

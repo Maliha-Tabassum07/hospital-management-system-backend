@@ -1,4 +1,4 @@
-package com.moin.ServiceRegistry;
+package com.maiha.ServiceRegistry;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

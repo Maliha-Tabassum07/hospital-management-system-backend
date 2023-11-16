@@ -10,12 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRegistrationResponse {
-    private DoctorEntity doctorDto;
+    private DoctorEntity doctorEntity;
     private String token;
-
-//    public UserRegistrationResponse(DoctorDTO doctorDto, String token) {
-//        this.doctorDto = doctorDto;
-//        this.token = token;
-//    }
 
 }

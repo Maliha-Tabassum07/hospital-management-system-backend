@@ -1,6 +1,5 @@
-package com.maliha.appointmentmanagement.entity;
+package com.maliha.appointmentmanagement.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,12 +9,7 @@ import java.time.LocalTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name ="appointment_schedule")
-public class AppointmentScheduleEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class AppointmentScheduleDTO {
     private Integer doctorId;
     private LocalTime preferedStartTime;
     private String day1;

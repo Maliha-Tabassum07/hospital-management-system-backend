@@ -8,10 +8,7 @@ import com.maliha.doctoradminmanagement.utilities.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,5 +30,25 @@ public class DoctorController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllDoctor(){
+        return new ResponseEntity<>(doctorService.getAllDoctor(),HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/{id}/get")
+    public ResponseEntity<?> getDoctorById(@PathVariable Integer id) throws Exception{
+        return new ResponseEntity<>(doctorService.getDoctorById(id),HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/{specialId}/get")
+    public ResponseEntity<?> getDoctorById(@PathVariable String specialId) throws Exception{
+        return new ResponseEntity<>(doctorService.getDoctorBySpecialId(specialId),HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/{name}/get")
+    public ResponseEntity<?> getDoctorByName(@PathVariable String name) throws Exception{
+        return new ResponseEntity<>(doctorService.getDoctorByName(name),HttpStatus.ACCEPTED);
+    }
+    @PutMapping("/update")
+    public ResponseEntity<?> updateDoctorById(@RequestBody DoctorDTO doctorDTO) throws Exception{
+        return new ResponseEntity<>(doctorService.updateDoctor(doctorDTO),HttpStatus.ACCEPTED);
     }
 }

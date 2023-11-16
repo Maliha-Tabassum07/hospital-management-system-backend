@@ -1,4 +1,4 @@
-package com.moin.ServiceRegistry;
+package com.maiha.ServiceRegistry;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
