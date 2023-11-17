@@ -20,5 +20,4 @@ public class AppointmentSlotEntity {
     private String status;
     private String day;
     private LocalTime startTime;
-
 }

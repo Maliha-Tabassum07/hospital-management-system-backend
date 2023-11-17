@@ -20,5 +20,4 @@ public class AppointmentScheduleEntity {
     private LocalTime preferedStartTime;
     private String day1;
     private String day2;
-    private Integer room;
 }

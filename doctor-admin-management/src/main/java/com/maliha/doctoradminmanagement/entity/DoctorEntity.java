@@ -26,6 +26,7 @@ public class DoctorEntity {
     private String imageUrl;
     private String phone;
     private String qualification;
+    private Integer room;
     @ManyToOne
     private DepartmentEntity department;
     @ManyToOne

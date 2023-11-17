@@ -25,6 +25,7 @@ public class DoctorDTO {
     private String role;
     private Long department;
     private Long designation;
+    private Integer room;
     private String phone;
     private List<Long> specialty;
 }
