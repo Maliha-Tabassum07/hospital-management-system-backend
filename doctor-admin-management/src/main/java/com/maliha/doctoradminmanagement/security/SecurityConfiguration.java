@@ -30,10 +30,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/doctor/login").permitAll()
                         .requestMatchers("/doctor/register","/department/populate","/designation/populate").hasAuthority("ADMIN")
-                        .requestMatchers("/users/getProfileById").hasAuthority("USER")
-                        .requestMatchers("/users/health-data").hasAuthority("USER")
-                        .requestMatchers("/users/createHealthDAta").hasAuthority("USER")
-                        .requestMatchers("/users/updateUserHealthData").hasAuthority("USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

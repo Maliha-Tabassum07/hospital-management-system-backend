@@ -49,6 +49,7 @@ public class DoctorService implements UserDetailsService {
         userEntity.setPhone(doctorDTO.getPhone());
         userEntity.setQualification(doctorDTO.getQualification());
         userEntity.setDepartment(departmentRepository.findById(doctorDTO.getDepartment()).orElseThrow(() -> new Exception()));
+        userEntity.setRoom(doctorDTO.getRoom());
         userEntity.setDesignation(designationRepository.findById(doctorDTO.getDesignation()).orElseThrow(() -> new Exception()));
         List<DepartmentEntity> departmentEntityList=new ArrayList<>();
         for(Long id:doctorDTO.getSpecialty()){

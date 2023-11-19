@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -29,6 +30,6 @@ public class MedicineEntity {
     private LocalDate expirationDate;
     private String sideEffect;
     @ManyToMany
-    private  SymptomEntity symptom;
+    private List<SymptomEntity> symptom;
 
 }
