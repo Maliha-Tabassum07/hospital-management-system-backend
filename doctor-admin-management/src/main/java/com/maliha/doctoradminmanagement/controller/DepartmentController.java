@@ -26,8 +26,8 @@ public class DepartmentController {
         return new ResponseEntity<>(departmentService.createDepartment(departmentDTO),HttpStatus.CREATED);
     }
     @GetMapping("/all")
-    public ResponseEntity<?> getAllDepartment(@RequestBody DepartmentDTO departmentDTO){
-        return new ResponseEntity<>(departmentService.getAllDepartment(),HttpStatus.CREATED);
+    public ResponseEntity<?> getAllDepartment(){
+        return new ResponseEntity<>(departmentService.getAllDepartment(),HttpStatus.ACCEPTED);
     }
     @GetMapping("/{departmentId}/get")
     public ResponseEntity<?> getDepartmentById(@PathVariable Long departmentId){

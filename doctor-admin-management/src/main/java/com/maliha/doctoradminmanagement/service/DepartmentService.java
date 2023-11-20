@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
 public class DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
-    public List<DepartmentDTO> getAllDepartment() {
+    public List<DepartmentEntity> getAllDepartment() {
         List<DepartmentDTO> departmentDTOList= new ArrayList<>();
         for(DepartmentEntity departmentEntity:departmentRepository.findAll()){
             departmentDTOList.add(new ModelMapper().map(departmentEntity,DepartmentDTO.class));
         }
-        return departmentDTOList.stream()
-                .sorted(Comparator.comparing(DepartmentDTO::getName))
+        return departmentRepository.findAll().stream()
+                .sorted(Comparator.comparing(DepartmentEntity::getName))
                 .collect(Collectors.toList());
     }
     public DepartmentDTO createDepartment(DepartmentDTO departmentDTO){

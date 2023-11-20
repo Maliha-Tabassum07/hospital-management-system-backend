@@ -15,7 +15,6 @@ import java.util.List;
 public class MedicineService {
     @Autowired
     private MedicineRepository medicineRepository;
-
     @Autowired
     private SymptomRepository symptomRepository;
     public MedicineEntity createMedicine(MedicineDTO medicineDTO) throws Exception {
