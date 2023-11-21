@@ -121,5 +121,21 @@ public class DoctorService implements UserDetailsService {
         doctorEntity.setSpecialty(departmentEntityList);
         return doctorRepository.save(doctorEntity);
     }
+    public List<DoctorViewDTO> getAllDoctorbyDepartmentId(Long departmentId){
+        List<DoctorEntity> doctorEntityList = doctorRepository.findAllByDepartmentId(departmentId);
+        List<DoctorViewDTO> doctorViewDTOList=new ArrayList<>();
+        for(DoctorEntity doctorEntity:doctorEntityList){
+            DoctorViewDTO doctorViewDTO = new ModelMapper().map(doctorEntity, DoctorViewDTO.class);
+            List<String> specialtyList=new ArrayList<>();
+            for (DepartmentEntity departmentEntity:doctorEntity.getSpecialty()){
+                specialtyList.add(departmentEntity.getName());
+            }
+            doctorViewDTO.setDepartmentDTO(new ModelMapper().map(doctorEntity.getDepartment(), DepartmentDTO.class));
+            doctorViewDTO.setDesignationDTO(new ModelMapper().map(doctorEntity.getDesignation(), DesignationDTO.class));
+            doctorViewDTO.setSpecialtyList(specialtyList);
+            doctorViewDTOList.add(doctorViewDTO);
+        }
+        return doctorViewDTOList;
+    }
 
 }

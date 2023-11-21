@@ -51,4 +51,9 @@ public class DoctorController {
     public ResponseEntity<?> updateDoctorById(@RequestBody DoctorDTO doctorDTO) throws Exception{
         return new ResponseEntity<>(doctorService.updateDoctor(doctorDTO),HttpStatus.ACCEPTED);
     }
+    @GetMapping("/{departmentId}/all")
+    public ResponseEntity<?> getDoctorByDepartmentId(@PathVariable Long departmentId) throws Exception{
+        return new ResponseEntity<>(doctorService.getAllDoctorbyDepartmentId(departmentId),HttpStatus.ACCEPTED);
+    }
+
 }

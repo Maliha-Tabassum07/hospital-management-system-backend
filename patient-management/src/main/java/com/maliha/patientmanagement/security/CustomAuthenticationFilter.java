@@ -1,15 +1,14 @@
-package com.maliha.doctoradminmanagement.security;
+package com.maliha.patientmanagement.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.maliha.doctoradminmanagement.SpringApplicationContext;
-import com.maliha.doctoradminmanagement.constants.AppConstants;
-import com.maliha.doctoradminmanagement.entity.DoctorEntity;
-import com.maliha.doctoradminmanagement.model.DoctorDTO;
-import com.maliha.doctoradminmanagement.model.DoctorLoginDTO;
-import com.maliha.doctoradminmanagement.repository.DoctorRepository;
-import com.maliha.doctoradminmanagement.service.DoctorService;
-import com.maliha.doctoradminmanagement.utilities.JWTUtils;
+import com.maliha.patientmanagement.SpringApplicationContext;
+import com.maliha.patientmanagement.constants.AppConstants;
+import com.maliha.patientmanagement.entity.PatientEntity;
+import com.maliha.patientmanagement.model.PatientDTO;
+import com.maliha.patientmanagement.model.PatientLoginDTO;
+import com.maliha.patientmanagement.repository.PatientRepository;
+import com.maliha.patientmanagement.service.PatientService;
+import com.maliha.patientmanagement.utilities.JWTUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,18 +35,18 @@ import java.util.Map;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     @Autowired
-    private DoctorRepository userRepository;
+    private PatientRepository userRepository;
     @Autowired
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        setFilterProcessesUrl("/doctor/login");
+        setFilterProcessesUrl("/patient/login");
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
-            DoctorLoginDTO creds = new ObjectMapper().readValue(request.getInputStream(), DoctorLoginDTO.class);
+            PatientLoginDTO creds = new ObjectMapper().readValue(request.getInputStream(), PatientLoginDTO.class);
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword())
             );
@@ -60,19 +59,19 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         String user = ((User) authResult.getPrincipal()).getUsername();
-        DoctorService doctorServiceRole = (DoctorService) SpringApplicationContext.getBean("doctorService");
-        DoctorEntity doctorEntity = doctorServiceRole.readByEmail(user);
+        PatientService patientServiceRole = (PatientService) SpringApplicationContext.getBean("patientService");
+        PatientEntity patientEntity = patientServiceRole.readByEmail(user);
         List<String> roles = new ArrayList<>();
-        roles.add(doctorEntity.getRole());
+        roles.add(patientEntity.getRole());
         String accessToken = JWTUtils.generateToken(user, roles);
-        DoctorService doctorService = (DoctorService) SpringApplicationContext.getBean("doctorService");
-        DoctorDTO doctorDto = doctorService.getDoctor(user);
+        PatientService patientService = (PatientService) SpringApplicationContext.getBean("patientService");
+        PatientDTO patientDTO = patientService.getPatient(user);
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("Message", "Successfully logged in");
         responseBody.put(AppConstants.HEADER_STRING, AppConstants.TOKEN_PREFIX + accessToken);
-        responseBody.put("role",doctorDto.getRole());
-        responseBody.put("id",doctorDto.getId());
+        responseBody.put("role",patientDTO.getRole());
+        responseBody.put("id",patientDTO.getId());
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(responseBody);

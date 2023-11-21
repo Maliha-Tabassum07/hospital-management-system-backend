@@ -16,6 +16,7 @@ public class PatientDTO {
     private String email;
     @NotBlank(message = "Password cannot be null")
     private String password;
+    private Integer id;
     private String role;
     private String address;
     private String phone;

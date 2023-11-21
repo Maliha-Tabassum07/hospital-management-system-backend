@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class DoctorDTO {
     private String specialId;
+    private Integer id;
     private String name;
     @NotBlank(message = "Your Id cannot be null")
     @Email(message = "Email must be a valid email address")

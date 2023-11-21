@@ -30,8 +30,8 @@ public class DepartmentController {
         return new ResponseEntity<>(departmentService.getAllDepartment(),HttpStatus.ACCEPTED);
     }
     @GetMapping("/{departmentId}/get")
-    public ResponseEntity<?> getDepartmentById(@PathVariable Long departmentId){
-        return new ResponseEntity<>(departmentService.getAllDepartment(),HttpStatus.CREATED);
+    public ResponseEntity<?> getDepartmentById(@PathVariable Long departmentId) throws Exception{
+        return new ResponseEntity<>(departmentService.getDepartmentById(departmentId),HttpStatus.CREATED);
     }
     @PutMapping("/{departmentId}/update")
     public ResponseEntity<?> updateDepartment (@PathVariable Long departmentId,@RequestBody DepartmentDTO departmentDTO)throws Exception{

@@ -1,4 +1,4 @@
-package com.maliha.doctoradminmanagement.security;
+package com.maliha.patientmanagement.security;
 
 
 import org.springframework.context.annotation.Bean;
@@ -34,8 +34,8 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/doctor/login","/department/all","/department/{departmentId}/get").permitAll()
-                        .requestMatchers("/doctor/{departmentId}/all","/doctor/all").permitAll()
+                        .requestMatchers("/patient/login","/patient/register").permitAll()
+                        .requestMatchers("/doctor/{departmentId}/all").permitAll()
                         .requestMatchers("/doctor/register","/department/populate","/designation/populate").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
