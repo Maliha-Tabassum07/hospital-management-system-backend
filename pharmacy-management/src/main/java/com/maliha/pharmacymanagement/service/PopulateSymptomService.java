@@ -54,6 +54,14 @@ public class PopulateSymptomService {
         symptomEntity=new SymptomEntity();
         symptomEntity.setName("Pain");
         symptomRepository.save(symptomEntity);
+
+        symptomEntity=new SymptomEntity();
+        symptomEntity.setName("Inflammation");
+        symptomRepository.save(symptomEntity);
+
+        symptomEntity=new SymptomEntity();
+        symptomEntity.setName("Arthritis");
+        symptomRepository.save(symptomEntity);
         return true;
 
     }

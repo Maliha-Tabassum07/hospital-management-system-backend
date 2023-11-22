@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/doctor/login","/pharmacy/medicine/all","/department/{departmentId}/get").permitAll()
                         .requestMatchers("/doctor/{departmentId}/all","/doctor/all").permitAll()
-                        .requestMatchers("/doctor/register","/pharmacy/populate","/designation/populate").hasAuthority("ADMIN")
+                        .requestMatchers("/pharmacy/populate/medicine","/pharmacy/populate/symptom").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

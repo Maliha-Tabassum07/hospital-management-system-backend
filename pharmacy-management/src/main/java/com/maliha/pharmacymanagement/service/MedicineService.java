@@ -32,6 +32,7 @@ public class MedicineService {
         for(Long id:medicineDTO.getSymptomList()){
             medicineEntity.getSymptom().add(symptomRepository.findById(id).orElseThrow(() -> new Exception()));
         }
+
         MedicineEntity storedMedicine =medicineRepository.save(medicineEntity);
         storedMedicine.setSpecialId(String.format("%s%02d", "M", storedMedicine.getId()));
         return medicineRepository.save(storedMedicine);

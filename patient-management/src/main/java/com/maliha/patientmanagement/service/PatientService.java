@@ -58,7 +58,6 @@ public class PatientService implements UserDetailsService {
         patientEntity.setAddress(patientDTO.getAddress());
         patientEntity.setImageUrl(patientDTO.getImageUrl());
         patientEntity.setPhone(patientDTO.getPhone());
-        // Add additional properties from PatientDTO to PatientEntity
         patientEntity.setGender(patientDTO.getGender());
         patientEntity.setFatherName(patientDTO.getFatherName());
         patientEntity.setMotherName(patientDTO.getMotherName());
