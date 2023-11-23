@@ -3,21 +3,13 @@ package com.maliha.patientmanagement.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatientDTO {
-    private String specialId;
+public class PatientViewDTO {
     private String name;
-    @NotBlank(message = "Your Id cannot be null")
-    @Email(message = "Email must be a valid email address")
-    private String email;
-    @NotBlank(message = "Password cannot be null")
-    private String password;
-    private Integer id;
-    private String role;
+    private String specialId;
     private String address;
     private String phone;
     private String gender;

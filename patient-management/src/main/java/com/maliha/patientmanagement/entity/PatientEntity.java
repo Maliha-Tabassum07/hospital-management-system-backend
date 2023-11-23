@@ -29,7 +29,7 @@ public class PatientEntity {
     private String imageUrl;
     private String fatherName;
     private String motherName;
-    private String maritialStatus;
+    private String maritalStatus;
     private String occupation;
     private String nationality;
     private String emergencyContactName;
