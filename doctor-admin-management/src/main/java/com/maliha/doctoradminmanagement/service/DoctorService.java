@@ -24,7 +24,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DoctorService implements UserDetailsService {
@@ -135,7 +137,9 @@ public class DoctorService implements UserDetailsService {
             doctorViewDTO.setSpecialtyList(specialtyList);
             doctorViewDTOList.add(doctorViewDTO);
         }
-        return doctorViewDTOList;
+        return doctorViewDTOList.stream()
+                .sorted(Comparator.comparing(DoctorViewDTO::getName))
+                .collect(Collectors.toList());
     }
 
 }
