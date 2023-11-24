@@ -13,9 +13,9 @@ public class DoctorAppointmentController {
     @Autowired
     private DoctorAppointmentService doctorAppointmentService;
 
-    @PostMapping("/{doctorId}/schedule/create")
-    public ResponseEntity<?> createAppointmentSchedule(@PathVariable Integer doctorId, @RequestBody AppointmentScheduleDTO appointmentScheduleDTO) throws Exception{
-        return new ResponseEntity<>(doctorAppointmentService.createAppointmentSchedule(doctorId,appointmentScheduleDTO), HttpStatus.ACCEPTED);
+    @PostMapping("/schedule/create")
+    public ResponseEntity<?> createAppointmentSchedule( @RequestBody AppointmentScheduleDTO appointmentScheduleDTO) throws Exception{
+        return new ResponseEntity<>(doctorAppointmentService.createAppointmentSchedule(appointmentScheduleDTO), HttpStatus.ACCEPTED);
     }
     @GetMapping("/{doctorId}/schedule/get")
     public ResponseEntity<?> getAppointmentSchedule(@PathVariable Integer id) throws Exception{
@@ -25,13 +25,13 @@ public class DoctorAppointmentController {
     public ResponseEntity<?> getAppointmentSlot(@PathVariable Integer doctorId) throws Exception{
         return new ResponseEntity<>(doctorAppointmentService.getAllAppointmentSlot(doctorId),HttpStatus.ACCEPTED);
     }
-    @PostMapping("{patientId}/{slotId}/book")
+    @PostMapping("/{slotId}/book")
     public ResponseEntity<?> bookAppointmentSlot(@PathVariable("patientId") Integer patientId,@PathVariable("slotId") Long slotId) throws Exception{
-        return new ResponseEntity<>(doctorAppointmentService.bookSlot(patientId,slotId),HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(doctorAppointmentService.bookSlot(slotId),HttpStatus.ACCEPTED);
     }
-    @PutMapping("{patientId}/{bookingId}/cancel")
-    public ResponseEntity<?> cancelAppointmentSlot(@PathVariable("patientId") Integer patientId,@PathVariable("bookingId") Long bookingId) throws Exception{
-        return new ResponseEntity<>(doctorAppointmentService.cancelSlot(patientId,bookingId),HttpStatus.ACCEPTED);
+    @PutMapping("/{bookingId}/cancel")
+    public ResponseEntity<?> cancelAppointmentSlot(@PathVariable("bookingId") Long bookingId) throws Exception{
+        return new ResponseEntity<>(doctorAppointmentService.cancelSlot(bookingId),HttpStatus.ACCEPTED);
     }
 
 }

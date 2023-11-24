@@ -3,10 +3,7 @@ package com.maliha.doctoradminmanagement.service;
 
 import com.maliha.doctoradminmanagement.entity.DepartmentEntity;
 import com.maliha.doctoradminmanagement.entity.DoctorEntity;
-import com.maliha.doctoradminmanagement.model.DepartmentDTO;
-import com.maliha.doctoradminmanagement.model.DesignationDTO;
-import com.maliha.doctoradminmanagement.model.DoctorDTO;
-import com.maliha.doctoradminmanagement.model.DoctorViewDTO;
+import com.maliha.doctoradminmanagement.model.*;
 import com.maliha.doctoradminmanagement.repository.DepartmentRepository;
 import com.maliha.doctoradminmanagement.repository.DesignationRepository;
 import com.maliha.doctoradminmanagement.repository.DoctorRepository;
@@ -140,6 +137,10 @@ public class DoctorService implements UserDetailsService {
         return doctorViewDTOList.stream()
                 .sorted(Comparator.comparing(DoctorViewDTO::getName))
                 .collect(Collectors.toList());
+    }
+    public DoctorFeignDTO getDoctorByEmail(String email) {
+        DoctorEntity doctorEntity = doctorRepository.findByEmail(email).get();
+        return  new ModelMapper().map(doctorEntity, DoctorFeignDTO.class);
     }
 
 }

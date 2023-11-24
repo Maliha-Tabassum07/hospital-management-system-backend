@@ -2,6 +2,7 @@ package com.maliha.doctoradminmanagement.controller;
 
 import com.maliha.doctoradminmanagement.entity.DoctorEntity;
 import com.maliha.doctoradminmanagement.model.DoctorDTO;
+import com.maliha.doctoradminmanagement.model.DoctorFeignDTO;
 import com.maliha.doctoradminmanagement.model.UserRegistrationResponse;
 import com.maliha.doctoradminmanagement.service.DoctorService;
 import com.maliha.doctoradminmanagement.utilities.JWTUtils;
@@ -54,6 +55,10 @@ public class DoctorController {
     @GetMapping("/{departmentId}/all")
     public ResponseEntity<?> getDoctorByDepartmentId(@PathVariable Long departmentId) throws Exception{
         return new ResponseEntity<>(doctorService.getAllDoctorbyDepartmentId(departmentId),HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/getDoctorByEmail")
+    public DoctorFeignDTO getDoctorByEmail(@RequestParam("email") String email){
+        return doctorService.getDoctorByEmail(email);
     }
 
 }

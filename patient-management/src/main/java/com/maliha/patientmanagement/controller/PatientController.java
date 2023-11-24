@@ -3,6 +3,7 @@ package com.maliha.patientmanagement.controller;
 import com.maliha.patientmanagement.entity.PatientEntity;
 import com.maliha.patientmanagement.model.HealthRecordDTO;
 import com.maliha.patientmanagement.model.PatientDTO;
+import com.maliha.patientmanagement.model.PatientFeignDTO;
 import com.maliha.patientmanagement.model.UserRegistrationResponse;
 import com.maliha.patientmanagement.service.PatientService;
 import com.maliha.patientmanagement.utilities.JWTUtils;
@@ -60,5 +61,10 @@ public class PatientController {
     public ResponseEntity<?> viewProfile()throws Exception{
         return new ResponseEntity<>(patientService.getSelfInfo(),HttpStatus.ACCEPTED);
     }
+    @GetMapping("/getPatientByEmail")
+    public PatientFeignDTO getPatientByEmail(@RequestParam("email") String email){
+        return patientService.getPatientByEmail(email);
+    }
+
 
 }

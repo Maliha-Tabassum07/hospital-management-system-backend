@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface AppointmentScheduleRepository extends JpaRepository<AppointmentScheduleEntity,Long> {
     Optional<AppointmentScheduleEntity> findByDoctorId(Integer doctorId);
+    Boolean existsByDoctorId(Integer doctorId);
 
 }

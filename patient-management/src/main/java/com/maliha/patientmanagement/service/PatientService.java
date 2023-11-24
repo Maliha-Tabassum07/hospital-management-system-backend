@@ -2,10 +2,7 @@ package com.maliha.patientmanagement.service;
 
 import com.maliha.patientmanagement.entity.HealthRecordEntity;
 import com.maliha.patientmanagement.entity.PatientEntity;
-import com.maliha.patientmanagement.model.HealthRecordDTO;
-import com.maliha.patientmanagement.model.HealthRecordViewDTO;
-import com.maliha.patientmanagement.model.PatientDTO;
-import com.maliha.patientmanagement.model.PatientViewDTO;
+import com.maliha.patientmanagement.model.*;
 import com.maliha.patientmanagement.repository.HealthRecordRepository;
 import com.maliha.patientmanagement.repository.PatientRepository;
 import org.modelmapper.ModelMapper;
@@ -155,6 +152,10 @@ public class PatientService implements UserDetailsService {
             return healthRecordViewDTO;
         }
         throw new Exception("Health Record doesn't exist");
+    }
+    public PatientFeignDTO getPatientByEmail(String email) {
+        PatientEntity patientEntity = patientRepository.findByEmail(email).get();
+        return  new ModelMapper().map(patientEntity, PatientFeignDTO.class);
     }
 }
 
