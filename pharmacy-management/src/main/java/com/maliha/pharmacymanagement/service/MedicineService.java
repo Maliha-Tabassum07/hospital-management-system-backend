@@ -8,6 +8,7 @@ import com.maliha.pharmacymanagement.repository.SymptomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +28,13 @@ public class MedicineService {
         medicineEntity.setManufacturer(medicineDTO.getManufacturer());
         medicineEntity.setConcentration(medicineDTO.getConcentration());
         medicineEntity.setUnitPrice(medicineDTO.getUnitPrice());
-        medicineEntity.setExpirationDate(medicineDTO.getExpirationDate());
+        medicineEntity.setExpirationDate(LocalDate.now().plusYears(3));
         medicineEntity.setSideEffect(medicineDTO.getSideEffect());
+        List<SymptomEntity> symptomEntityList=new ArrayList<>();
         for(Long id:medicineDTO.getSymptomList()){
-            medicineEntity.getSymptom().add(symptomRepository.findById(id).orElseThrow(() -> new Exception()));
+            symptomEntityList.add(symptomRepository.findById(id).orElseThrow(() -> new Exception()));
         }
-
+        medicineEntity.setSymptom(symptomEntityList);
         MedicineEntity storedMedicine =medicineRepository.save(medicineEntity);
         storedMedicine.setSpecialId(String.format("%s%02d", "M", storedMedicine.getId()));
         return medicineRepository.save(storedMedicine);
@@ -40,23 +42,28 @@ public class MedicineService {
     public List<MedicineEntity> getAllMedicine() throws Exception {
         return medicineRepository.findAll();
     }
-    public List<MedicineEntity> getAllSymptomId(Long symptomId) throws Exception {
-        return medicineRepository.findAllBySymptom(symptomRepository.findById(symptomId).orElseThrow(() -> new Exception()));
+    public List<String> getAllSymptomId(Long symptomId) throws Exception {
+        List<String> medicineName=new ArrayList<>();
+        for (MedicineEntity medicineEntity:medicineRepository.findAllBySymptom(symptomRepository.findById(symptomId).orElseThrow(() -> new Exception()))){
+            medicineName.add(medicineEntity.getMedicineName());
+        }
+        return medicineName;
     }
-    public List<MedicineEntity> getAllSymptomName(String symptomName) throws Exception {
+    public List<MedicineEntity> getAllBySymptomName(String symptomName) throws Exception {
         return medicineRepository.findAllBySymptom(symptomRepository.findByName(symptomName).orElseThrow(() -> new Exception()));
     }
     public MedicineEntity getByName(String medicineName) throws Exception {
         return medicineRepository.findByMedicineName(medicineName).orElseThrow(() -> new Exception());
     }
-    public MedicineEntity getById(Long id) throws Exception {
+    public MedicineEntity getById(Integer id) throws Exception {
         return medicineRepository.findById(id).orElseThrow(() -> new Exception());
     }
     public MedicineEntity getBySpecialId(String specialId) throws Exception {
-        return medicineRepository.findByMedicineName(specialId).orElseThrow(() -> new Exception());
+        System.out.println("hello");
+        return medicineRepository.findBySpecialId(specialId).orElseThrow(() -> new Exception());
     }
 
-    public MedicineEntity updateDoctor(MedicineDTO medicineDTO,Long id) throws Exception{
+    public MedicineEntity updateMedicine(MedicineDTO medicineDTO,Integer id) throws Exception{
         MedicineEntity medicineEntity=medicineRepository.findById(id).orElseThrow(() -> new NullPointerException());
         medicineEntity.setMedicineName(medicineDTO.getMedicineName());
         medicineEntity.setGenericName(medicineDTO.getGenericName());
@@ -64,19 +71,36 @@ public class MedicineService {
         medicineEntity.setManufacturer(medicineDTO.getManufacturer());
         medicineEntity.setConcentration(medicineDTO.getConcentration());
         medicineEntity.setUnitPrice(medicineDTO.getUnitPrice());
-        medicineEntity.setExpirationDate(medicineDTO.getExpirationDate());
         medicineEntity.setSideEffect(medicineDTO.getSideEffect());
+        List<SymptomEntity> symptomEntityList=new ArrayList<>();
         for(Long symptomId:medicineDTO.getSymptomList()){
-            medicineEntity.getSymptom().add(symptomRepository.findById(symptomId).orElseThrow(() -> new Exception()));
+            symptomEntityList.add(symptomRepository.findById(symptomId).orElseThrow(() -> new Exception()));
         }
+        medicineEntity.setSymptom(symptomEntityList);
         return medicineRepository.save(medicineEntity);
     }
-    public Boolean deleteMedicine(Long id) throws Exception{
+    public Boolean deleteMedicine(Integer id) throws Exception{
         if (medicineRepository.existsById(id)){
             medicineRepository.delete(medicineRepository.findById(id).get());
             return true;
         }
         return false;
     }
+    public List<MedicineEntity> medicineHelpDesk(String input)throws Exception{
+        if(medicineRepository.existsByMedicineName(input)){
+            return medicineRepository.findAllByMedicineName(input);
+        }
+        else if(medicineRepository.existsByGenericName(input)){
+            return medicineRepository.findAllByGenericName(input);
+        }
+        else if (medicineRepository.existsBySpecialId(input)){
+            return medicineRepository.findAllBySpecialId(input);
+        }
+        else if (symptomRepository.existsByName(input)){
+            return getAllBySymptomName(input);
+        }
+        throw new Exception("Wrong Input");
+    }
+
 
 }

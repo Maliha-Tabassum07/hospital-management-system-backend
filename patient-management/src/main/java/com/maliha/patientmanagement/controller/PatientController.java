@@ -1,10 +1,7 @@
 package com.maliha.patientmanagement.controller;
 
 import com.maliha.patientmanagement.entity.PatientEntity;
-import com.maliha.patientmanagement.model.HealthRecordDTO;
-import com.maliha.patientmanagement.model.PatientDTO;
-import com.maliha.patientmanagement.model.PatientFeignDTO;
-import com.maliha.patientmanagement.model.UserRegistrationResponse;
+import com.maliha.patientmanagement.model.*;
 import com.maliha.patientmanagement.service.PatientService;
 import com.maliha.patientmanagement.utilities.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +62,16 @@ public class PatientController {
     public PatientFeignDTO getPatientByEmail(@RequestParam("email") String email){
         return patientService.getPatientByEmail(email);
     }
-
-
+    @GetMapping("/recommendation")
+    public RecommendationDTO getPatientRecommendation() throws Exception{
+        return patientService.getRecommendation();
+    }
+    @PutMapping("/update/patient-profile")
+    public ResponseEntity<?> updateProfile(@RequestBody PatientDTO patientDTO) {
+        return new ResponseEntity<>(patientService.updatePatientProfile(patientDTO),HttpStatus.ACCEPTED);
+    }
+    @PutMapping("/update/health-record")
+    public ResponseEntity<?> updateHealthRecord(@RequestBody HealthRecordDTO healthRecordDTO) throws Exception{
+        return new ResponseEntity<>(patientService.updateHealthRecord(healthRecordDTO),HttpStatus.ACCEPTED);
+    }
 }

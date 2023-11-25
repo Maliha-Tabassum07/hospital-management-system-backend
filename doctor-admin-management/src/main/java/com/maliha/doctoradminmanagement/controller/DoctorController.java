@@ -3,6 +3,7 @@ package com.maliha.doctoradminmanagement.controller;
 import com.maliha.doctoradminmanagement.entity.DoctorEntity;
 import com.maliha.doctoradminmanagement.model.DoctorDTO;
 import com.maliha.doctoradminmanagement.model.DoctorFeignDTO;
+import com.maliha.doctoradminmanagement.model.DoctorViewDTO;
 import com.maliha.doctoradminmanagement.model.UserRegistrationResponse;
 import com.maliha.doctoradminmanagement.service.DoctorService;
 import com.maliha.doctoradminmanagement.utilities.JWTUtils;
@@ -36,29 +37,42 @@ public class DoctorController {
     public ResponseEntity<?> getAllDoctor(){
         return new ResponseEntity<>(doctorService.getAllDoctor(),HttpStatus.ACCEPTED);
     }
-    @GetMapping("/{id}/get")
-    public ResponseEntity<?> getDoctorById(@PathVariable Integer id) throws Exception{
-        return new ResponseEntity<>(doctorService.getDoctorById(id),HttpStatus.ACCEPTED);
+    @GetMapping("/profile")
+    public ResponseEntity<?> getDoctorProfile() throws Exception{
+        return new ResponseEntity<>(doctorService.getDoctorById(),HttpStatus.ACCEPTED);
     }
-    @GetMapping("/{specialId}/get")
-    public ResponseEntity<?> getDoctorById(@PathVariable String specialId) throws Exception{
-        return new ResponseEntity<>(doctorService.getDoctorBySpecialId(specialId),HttpStatus.ACCEPTED);
+    @GetMapping("/{designationId}/designationId/get")
+    public ResponseEntity<?> getDoctorBySpecialId(@PathVariable Long designationId) throws Exception{
+        return new ResponseEntity<>(doctorService.getAllDoctorByDesignationId(designationId),HttpStatus.ACCEPTED);
     }
-    @GetMapping("/{name}/get")
-    public ResponseEntity<?> getDoctorByName(@PathVariable String name) throws Exception{
-        return new ResponseEntity<>(doctorService.getDoctorByName(name),HttpStatus.ACCEPTED);
+    @GetMapping("/{designationName}/designationName/get")
+    public ResponseEntity<?> getDoctorByDesignationName(@PathVariable String designationName) throws Exception{
+        return new ResponseEntity<>(doctorService.getAllDoctorByDesignationName(designationName),HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/{departmentName}/departmentName/get")
+    public ResponseEntity<?> getDoctorByDepartmentName(@PathVariable String departmentName) throws Exception{
+        return new ResponseEntity<>(doctorService.getAllDoctorByDepartmentName(departmentName),HttpStatus.ACCEPTED);
     }
     @PutMapping("/update")
-    public ResponseEntity<?> updateDoctorById(@RequestBody DoctorDTO doctorDTO) throws Exception{
+    public ResponseEntity<?> updateDoctorProfile(@RequestBody DoctorDTO doctorDTO) throws Exception{
         return new ResponseEntity<>(doctorService.updateDoctor(doctorDTO),HttpStatus.ACCEPTED);
     }
     @GetMapping("/{departmentId}/all")
     public ResponseEntity<?> getDoctorByDepartmentId(@PathVariable Long departmentId) throws Exception{
         return new ResponseEntity<>(doctorService.getAllDoctorbyDepartmentId(departmentId),HttpStatus.ACCEPTED);
     }
+    @GetMapping("/{input}/search")
+    public ResponseEntity<?> getDoctorHelpDesk(@PathVariable String input)throws Exception{
+        return new ResponseEntity<>(doctorService.doctorHelpDesk(input),HttpStatus.ACCEPTED);
+    }
+    //feign client
     @GetMapping("/getDoctorByEmail")
     public DoctorFeignDTO getDoctorByEmail(@RequestParam("email") String email){
         return doctorService.getDoctorByEmail(email);
     }
-
+    //feign client
+    @GetMapping("/getAllDoctorByDepartmentId")
+    public List<String> getAllDoctorByDepartmentId(@RequestParam Long departmentId) throws Exception{
+        return doctorService.getAllDoctorNameByDepartmentId(departmentId);
+    }
 }

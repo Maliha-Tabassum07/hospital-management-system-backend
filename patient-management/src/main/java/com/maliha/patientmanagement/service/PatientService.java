@@ -3,6 +3,8 @@ package com.maliha.patientmanagement.service;
 import com.maliha.patientmanagement.entity.HealthRecordEntity;
 import com.maliha.patientmanagement.entity.PatientEntity;
 import com.maliha.patientmanagement.model.*;
+import com.maliha.patientmanagement.networkmanager.DoctorFeignClient;
+import com.maliha.patientmanagement.networkmanager.MedicineFeignClient;
 import com.maliha.patientmanagement.repository.HealthRecordRepository;
 import com.maliha.patientmanagement.repository.PatientRepository;
 import org.modelmapper.ModelMapper;
@@ -30,6 +32,10 @@ public class PatientService implements UserDetailsService {
     private PatientRepository patientRepository;
     @Autowired
     private HealthRecordRepository healthRecordRepository;
+    @Autowired
+    private DoctorFeignClient doctorFeignClient;
+    @Autowired
+    private MedicineFeignClient medicineFeignClient;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -77,6 +83,41 @@ public class PatientService implements UserDetailsService {
         storedPatientDetails.setSpecialId(String.format("%s%02d", "P", storedPatientDetails.getId()));
         return patientRepository.save(storedPatientDetails);
     }
+    public PatientEntity updatePatientProfile(PatientDTO patientDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PatientEntity patientEntity = patientRepository.findByEmail(authentication.getName()).get();
+        patientEntity.setEmail(patientDTO.getEmail());
+        patientEntity.setPhone(patientDTO.getPhone());
+        patientEntity.setMaritalStatus(patientDTO.getMaritalStatus());
+        patientEntity.setOccupation(patientDTO.getOccupation());
+        patientEntity.setNationality(patientDTO.getNationality());
+        patientEntity.setEmergencyContactName(patientDTO.getEmergencyContactName());
+        patientEntity.setEmergencyContactNo(patientDTO.getEmergencyContactNo());
+        return patientRepository.save(patientEntity);
+    }
+    public HealthRecordViewDTO updateHealthRecord(HealthRecordDTO healthRecordDTO) throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PatientEntity patientEntity = patientRepository.findByEmail(authentication.getName()).get();
+        Integer patientId=patientEntity.getId();
+        if (healthRecordRepository.findById(patientId).isPresent()) {
+            HealthRecordEntity healthDataEntity = healthRecordRepository.findById(patientId).get();
+            healthDataEntity.setHeightCm(healthRecordDTO.getHeightCm());
+            healthDataEntity.setWeightKg(healthRecordDTO.getWeightKg());
+            healthDataEntity.setBloodSugarLevel(healthRecordDTO.getBloodSugarLevel());
+            healthDataEntity.setHeartRate(healthRecordDTO.getHeartRate());
+            healthDataEntity.setBmi(healthRecordDTO.getWeightKg() / ((healthRecordDTO.getHeightCm() / 100) * (healthRecordDTO.getHeightCm() / 100)));
+            healthDataEntity.setDate(LocalDate.now());
+            healthDataEntity.setSleepHour(healthRecordDTO.getSleepHour());
+            healthDataEntity.setBloodGroup(healthRecordDTO.getBloodGroup());
+            healthDataEntity.setBloodPressure(healthRecordDTO.getBloodPressure());
+            healthDataEntity.setSmoke(healthRecordDTO.getSmoke());
+            healthDataEntity.setAllergy(healthRecordDTO.getAllergy());
+            HealthRecordViewDTO healthRecordViewDTO = new ModelMapper().map(healthRecordRepository.save(healthDataEntity), HealthRecordViewDTO.class);
+            healthRecordViewDTO.setSpecialId(patientEntity.getSpecialId());
+            return healthRecordViewDTO;
+        }
+        else throw new Exception("Create health Record first");
+    }
     public HealthRecordViewDTO createHealthRecord(HealthRecordDTO healthRecordDTO) throws Exception{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<PatientEntity> patientEntity = patientRepository.findByEmail(authentication.getName());
@@ -84,7 +125,6 @@ public class PatientService implements UserDetailsService {
         if (healthRecordRepository.findById(id).isPresent()) {
             throw new Exception("This user already exists in the database");
         }
-        HealthRecordViewDTO healthRecordViewDTO=new HealthRecordViewDTO();
         HealthRecordEntity healthDataEntity = new HealthRecordEntity();
         healthDataEntity.setId(id);
         healthDataEntity.setHeightCm(healthRecordDTO.getHeightCm());
@@ -97,7 +137,8 @@ public class PatientService implements UserDetailsService {
         healthDataEntity.setBloodGroup(healthRecordDTO.getBloodGroup());
         healthDataEntity.setBloodPressure(healthRecordDTO.getBloodPressure());
         healthDataEntity.setSmoke(healthRecordDTO.getSmoke());
-        healthRecordViewDTO= new ModelMapper().map(healthRecordRepository.save(healthDataEntity), HealthRecordViewDTO.class);
+        healthDataEntity.setAllergy(healthRecordDTO.getAllergy());
+        HealthRecordViewDTO healthRecordViewDTO= new ModelMapper().map(healthRecordRepository.save(healthDataEntity), HealthRecordViewDTO.class);
         healthRecordViewDTO.setSpecialId(patientEntity.get().getSpecialId());
         return healthRecordViewDTO;
     }
@@ -135,7 +176,6 @@ public class PatientService implements UserDetailsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<PatientEntity> patientEntity = patientRepository.findByEmail(authentication.getName());
         Integer id = patientEntity.orElseThrow(() -> new Exception()).getId();
-        PatientViewDTO patientViewDTO =new PatientViewDTO();
         if(patientRepository.existsById(id)){
             return new ModelMapper().map(patientRepository.findById(id).get(),PatientViewDTO.class);
         }
@@ -157,5 +197,79 @@ public class PatientService implements UserDetailsService {
         PatientEntity patientEntity = patientRepository.findByEmail(email).get();
         return  new ModelMapper().map(patientEntity, PatientFeignDTO.class);
     }
+    public RecommendationDTO getRecommendation()throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<PatientEntity> patientEntity = patientRepository.findByEmail(authentication.getName());
+        Integer id = patientEntity.orElseThrow(() -> new Exception()).getId();
+        RecommendationDTO recommendationDTO=new RecommendationDTO();
+        HealthRecordEntity healthRecordEntity=healthRecordRepository.findById(id).orElseThrow(() -> new Exception());
+        if(healthRecordEntity.getBloodPressure().equals("HIGH")){
+            recommendationDTO.setDoctorName(doctorFeignClient.getAllDoctorByDepartmentId(1l));
+            recommendationDTO.setRecommendation( "Your blood pressure is high. Avoid fatty food");
+            recommendationDTO.setMedicine(medicineFeignClient.getAllMedicineBySymptomId(4l));
+            recommendationDTO.setTreatmentPlan("\n You need treatment for high blood pressure");
+            if (healthRecordEntity.getBloodSugarLevel()>=7.5){
+                for (String doctorName:doctorFeignClient.getAllDoctorByDepartmentId(5l)){
+                    recommendationDTO.getDoctorName().add(doctorName);
+                }
+                recommendationDTO.setRecommendation(recommendationDTO.getRecommendation()+"\n Your blood sugar level is high. Avoid sugary food and consume less carbohydrate");
+                for (String medicineName:medicineFeignClient.getAllMedicineBySymptomId(5l)){
+                    recommendationDTO.getMedicine().add(medicineName);
+                }
+                recommendationDTO.setTreatmentPlan(recommendationDTO.getTreatmentPlan()+"\n You need checkup for diabetes");
+                if (healthRecordEntity.getAllergy()){
+                    for (String doctorName:doctorFeignClient.getAllDoctorByDepartmentId(4l)){
+                        recommendationDTO.getDoctorName().add(doctorName);
+                    }
+                    recommendationDTO.setRecommendation(recommendationDTO.getRecommendation()+"\n As you have allergy avoid foods like prawn, eggplant or red meats");
+                    for (String medicineName:medicineFeignClient.getAllMedicineBySymptomId(7l)){
+                        recommendationDTO.getMedicine().add(medicineName);
+                    }
+                    recommendationDTO.setTreatmentPlan(recommendationDTO.getTreatmentPlan()+"\n You can visit our dermatologists for more detailed consultation");
+                }
+            }else {
+                if (healthRecordEntity.getAllergy()){
+                    for (String doctorName:doctorFeignClient.getAllDoctorByDepartmentId(4l)){
+                        recommendationDTO.getDoctorName().add(doctorName);
+                    }
+                    recommendationDTO.setRecommendation(recommendationDTO.getRecommendation()+"\n As you have allergy avoid foods like prawn, eggplant or red meats");
+                    for (String medicineName:medicineFeignClient.getAllMedicineBySymptomId(7l)){
+                        recommendationDTO.getMedicine().add(medicineName);
+                    }
+                    recommendationDTO.setTreatmentPlan(recommendationDTO.getTreatmentPlan()+"\n You can visit our dermatologists for more detailed consultation");
+                }
+            }
+        }
+        else {
+            if (healthRecordEntity.getBloodSugarLevel()>=7.5){
+                recommendationDTO.setDoctorName(doctorFeignClient.getAllDoctorByDepartmentId(5l));
+                recommendationDTO.setRecommendation(" Your blood sugar level is high. Avoid sugary food and consume less carbohydrate");
+                recommendationDTO.setMedicine(medicineFeignClient.getAllMedicineBySymptomId(5l));
+                recommendationDTO.setTreatmentPlan(" You need checkup for diabetes");
+                if (healthRecordEntity.getAllergy()){
+                    for (String doctorName:doctorFeignClient.getAllDoctorByDepartmentId(4l)){
+                        recommendationDTO.getDoctorName().add(doctorName);
+                    }
+                    recommendationDTO.setRecommendation(recommendationDTO.getRecommendation()+"\n As you have allergy avoid foods like prawn, eggplant or red meats");
+                    for (String medicineName:medicineFeignClient.getAllMedicineBySymptomId(7l)){
+                        recommendationDTO.getMedicine().add(medicineName);
+                    }
+                    recommendationDTO.setTreatmentPlan(recommendationDTO.getTreatmentPlan()+"\n You can visit our dermatologists for more detailed consultation");
+                }
+            }else {
+                if (healthRecordEntity.getAllergy()){
+                    recommendationDTO.setDoctorName(doctorFeignClient.getAllDoctorByDepartmentId(4l));
+                    recommendationDTO.setRecommendation("\n As you have allergy avoid foods like prawn, eggplant or red meats");
+                    recommendationDTO.setMedicine(medicineFeignClient.getAllMedicineBySymptomId(7l));
+                    recommendationDTO.setTreatmentPlan("\n You can visit our dermatologists for more detailed consultation");
+                }
+                else {
+                    recommendationDTO.setRecommendation("\n This recommendation only work for diabetes, high blood pressure and allergy.Fortunately, you don't have those. For other diseases visit our consultants. Thank you!");
+                }
+            }
+        }
+        return recommendationDTO;
+    }
+
 }
 

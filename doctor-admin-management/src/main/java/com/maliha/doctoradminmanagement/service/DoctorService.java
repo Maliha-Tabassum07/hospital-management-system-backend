@@ -10,6 +10,7 @@ import com.maliha.doctoradminmanagement.repository.DoctorRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,7 +87,10 @@ public class DoctorService implements UserDetailsService {
         }
         return doctorViewDTOList;
     }
-    public DoctorEntity getDoctorById(Integer id) throws Exception{
+    public DoctorEntity getDoctorById() throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<DoctorEntity> doctorEntity = doctorRepository.findByEmail(authentication.getName());
+        Integer id = doctorEntity.orElseThrow(() -> new Exception()).getId();
         return doctorRepository.findById(id).orElseThrow(() -> new Exception());
     }
     @Override
@@ -138,9 +143,86 @@ public class DoctorService implements UserDetailsService {
                 .sorted(Comparator.comparing(DoctorViewDTO::getName))
                 .collect(Collectors.toList());
     }
+    public List<DoctorViewDTO> getAllDoctorByDesignationId(Long designationId){
+        List<DoctorEntity> doctorEntityList = doctorRepository.findAllByDesignationId(designationId);
+        List<DoctorViewDTO> doctorViewDTOList=new ArrayList<>();
+        for(DoctorEntity doctorEntity:doctorEntityList){
+            DoctorViewDTO doctorViewDTO = new ModelMapper().map(doctorEntity, DoctorViewDTO.class);
+            List<String> specialtyList=new ArrayList<>();
+            for (DepartmentEntity departmentEntity:doctorEntity.getSpecialty()){
+                specialtyList.add(departmentEntity.getName());
+            }
+            doctorViewDTO.setDepartmentDTO(new ModelMapper().map(doctorEntity.getDepartment(), DepartmentDTO.class));
+            doctorViewDTO.setDesignationDTO(new ModelMapper().map(doctorEntity.getDesignation(), DesignationDTO.class));
+            doctorViewDTO.setSpecialtyList(specialtyList);
+            doctorViewDTOList.add(doctorViewDTO);
+        }
+        return doctorViewDTOList.stream()
+                .sorted(Comparator.comparing(DoctorViewDTO::getName))
+                .collect(Collectors.toList());
+    }
     public DoctorFeignDTO getDoctorByEmail(String email) {
         DoctorEntity doctorEntity = doctorRepository.findByEmail(email).get();
         return  new ModelMapper().map(doctorEntity, DoctorFeignDTO.class);
+    }
+    public List<String> getAllDoctorNameByDepartmentId(Long departmentId){
+        List<String> doctorName=new ArrayList<>();
+        List<DoctorViewDTO> doctorViewDTOList=getAllDoctorbyDepartmentId(departmentId);
+        for (DoctorViewDTO doctorViewDTO:doctorViewDTOList){
+            doctorName.add(doctorViewDTO.getName());
+        }
+        return doctorName;
+    }
+    public List<DoctorViewDTO> getAllDoctorByDepartmentName(String departmentName)throws Exception{
+        if(departmentRepository.existsByName(departmentName)){
+            return getAllDoctorbyDepartmentId(departmentRepository.findByName(departmentName).get().getId());
+        }
+        throw new Exception();
+    }
+    public List<DoctorViewDTO> getAllDoctorByDesignationName(String designationName)throws Exception{
+        if(designationRepository.existsByName(designationName)){
+            return getAllDoctorByDesignationId(designationRepository.findByName(designationName).get().getId());
+        }
+        throw new Exception();
+    }
+    public List<DoctorViewDTO> doctorHelpDesk(String searchInput) throws Exception{
+        if(departmentRepository.existsByName(searchInput)){
+            return getAllDoctorByDepartmentName(searchInput);
+        }
+        else if (designationRepository.existsByName(searchInput)){
+            return getAllDoctorByDesignationName(searchInput);
+        }
+        else if (doctorRepository.existsByName(searchInput)){
+            List<DoctorViewDTO> doctorViewDTOList=new ArrayList<>();
+            for(DoctorEntity doctorEntity:doctorRepository.findAllByName(searchInput)){
+                DoctorViewDTO doctorViewDTO = new ModelMapper().map(doctorEntity, DoctorViewDTO.class);
+                List<String> specialtyList=new ArrayList<>();
+                for (DepartmentEntity departmentEntity:doctorEntity.getSpecialty()){
+                    specialtyList.add(departmentEntity.getName());
+                }
+                doctorViewDTO.setDepartmentDTO(new ModelMapper().map(doctorEntity.getDepartment(), DepartmentDTO.class));
+                doctorViewDTO.setDesignationDTO(new ModelMapper().map(doctorEntity.getDesignation(), DesignationDTO.class));
+                doctorViewDTO.setSpecialtyList(specialtyList);
+                doctorViewDTOList.add(doctorViewDTO);
+            }
+            return doctorViewDTOList;
+        }
+        else if(doctorRepository.existsBySpecialId(searchInput)){
+            List<DoctorViewDTO> doctorViewDTOList=new ArrayList<>();
+            for(DoctorEntity doctorEntity:doctorRepository.findAllBySpecialId(searchInput)){
+                DoctorViewDTO doctorViewDTO = new ModelMapper().map(doctorEntity, DoctorViewDTO.class);
+                List<String> specialtyList=new ArrayList<>();
+                for (DepartmentEntity departmentEntity:doctorEntity.getSpecialty()){
+                    specialtyList.add(departmentEntity.getName());
+                }
+                doctorViewDTO.setDepartmentDTO(new ModelMapper().map(doctorEntity.getDepartment(), DepartmentDTO.class));
+                doctorViewDTO.setDesignationDTO(new ModelMapper().map(doctorEntity.getDesignation(), DesignationDTO.class));
+                doctorViewDTO.setSpecialtyList(specialtyList);
+                doctorViewDTOList.add(doctorViewDTO);
+            }
+            return doctorViewDTOList;
+        }
+        throw new Exception("Wrong Input");
     }
 
 }

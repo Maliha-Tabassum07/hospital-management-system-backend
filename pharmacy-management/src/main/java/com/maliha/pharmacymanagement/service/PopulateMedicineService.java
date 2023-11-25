@@ -20,7 +20,7 @@ public class PopulateMedicineService {
     private MedicineRepository medicineRepository;
 
     public Boolean populateMedicine(){
-        if (medicineRepository.existsById(1l)){
+        if (medicineRepository.existsById(1)){
             return false;
         }
         MedicineEntity medicineEntity=new MedicineEntity();

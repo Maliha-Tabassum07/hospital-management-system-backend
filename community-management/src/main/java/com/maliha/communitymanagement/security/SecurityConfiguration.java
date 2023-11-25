@@ -1,4 +1,4 @@
-package com.maliha.doctoradminmanagement.security;
+package com.maliha.communitymanagement.security;
 
 
 import org.springframework.context.annotation.Bean;
@@ -32,16 +32,14 @@ public class SecurityConfiguration {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/doctor/login","/department/all","/department/{departmentId}/get").permitAll()
-                        .requestMatchers("/doctor/{departmentId}/all","/doctor/all","/doctor/{input}/search").permitAll()
-                        .requestMatchers("/doctor/{departmentName}/departmentName/get","/doctor/{designationName}/designationName/get","/doctor/{designationId}/designationId/get").permitAll()
-                        .requestMatchers("/doctor/register","/department/populate","/designation/populate").hasAuthority("ADMIN")
-                        .requestMatchers("/doctor/profile","/doctor/update").hasAuthority("DOCTOR")
+                        .requestMatchers("/appointment/schedule/create","/appointment/medicine/all").hasAuthority("DOCTOR")
+                        .requestMatchers("/appointment/{doctorId}/slot/get","/appointment/{doctorId}/schedule/get").permitAll()
+                        .requestMatchers("/appointment/{slotId}/book","/appointment/{bookingId}/cancel").hasAuthority("PATIENT")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilter(new CustomAuthenticationFilter(authenticationManager))
                 .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 

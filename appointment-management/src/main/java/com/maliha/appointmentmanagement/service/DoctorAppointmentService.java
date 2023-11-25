@@ -103,4 +103,7 @@ public class DoctorAppointmentService {
         }
         return false;
     }
+    //update schedule
+    //make slots unavailable
+    //make slots available
 }

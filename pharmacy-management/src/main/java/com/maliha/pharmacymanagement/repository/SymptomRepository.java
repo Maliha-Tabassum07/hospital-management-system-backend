@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface SymptomRepository extends JpaRepository<SymptomEntity,Long>{
     Optional<SymptomEntity> findByName(String name);
+    Boolean existsByName(String name);
 }

@@ -28,5 +28,6 @@ public class HealthRecordEntity {
     private LocalDate date;
     private Integer sleepHour;
     private Boolean smoke;
+    private Boolean allergy;
 
 }

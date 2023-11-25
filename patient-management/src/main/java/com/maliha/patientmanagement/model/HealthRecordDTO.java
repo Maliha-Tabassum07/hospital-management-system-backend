@@ -20,4 +20,5 @@ public class HealthRecordDTO {
     private LocalDate date;
     private Integer sleepHour;
     private Boolean smoke;
+    private Boolean allergy;
 }
