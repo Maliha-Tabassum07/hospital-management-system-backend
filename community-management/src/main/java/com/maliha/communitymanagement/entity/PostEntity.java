@@ -18,7 +18,7 @@ public class PostEntity {
     private Long id;
     private String content;
     private Integer memberId;
-    private String name;
+    private String memberName;
     @OneToMany
     private List<CommentEntity> commentEntityList;
 }

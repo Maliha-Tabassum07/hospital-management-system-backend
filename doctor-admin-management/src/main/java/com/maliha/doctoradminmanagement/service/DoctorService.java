@@ -163,6 +163,7 @@ public class DoctorService implements UserDetailsService {
     }
     public DoctorFeignDTO getDoctorByEmail(String email) {
         DoctorEntity doctorEntity = doctorRepository.findByEmail(email).get();
+        System.out.println(email);
         return  new ModelMapper().map(doctorEntity, DoctorFeignDTO.class);
     }
     public List<String> getAllDoctorNameByDepartmentId(Long departmentId){

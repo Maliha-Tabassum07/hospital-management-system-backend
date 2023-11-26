@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "patient-management", configuration = FeignClientConfiguration.class)
 public interface PatientFeignClient {
     @GetMapping("patient/getPatientByEmail")
-    public PatientFeignDTO getPatientByEmail(@RequestParam("email") String email);
+    PatientFeignDTO getPatientByEmail(@RequestParam("email") String email);
 }

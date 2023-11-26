@@ -19,6 +19,7 @@ public class AppointmentBookingEntity {
     private Long id;
     private Integer patientId;
     private LocalDate bookingDate;
+    private Boolean completion;
     @ManyToOne
     private AppointmentSlotEntity appointmentSlotEntity;
 }

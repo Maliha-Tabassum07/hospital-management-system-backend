@@ -34,9 +34,9 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/appointment/schedule/create","/appointment/medicine/all").hasAuthority("DOCTOR")
-                        .requestMatchers("/appointment/{doctorId}/slot/get","/appointment/{doctorId}/schedule/get").permitAll()
-                        .requestMatchers("/appointment/{slotId}/book","/appointment/{bookingId}/cancel").hasAuthority("PATIENT")
+                        .requestMatchers("/community/create").hasAuthority("ADMIN")
+                        .requestMatchers("/community/get/all").permitAll()
+                        .requestMatchers("/community/{communityId}/get","/community/{communityId}/join","/community/{communityId}/post/create","/community/{communityId}/post/all","/community/{postId}/comment/create").hasAuthority("PATIENT")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

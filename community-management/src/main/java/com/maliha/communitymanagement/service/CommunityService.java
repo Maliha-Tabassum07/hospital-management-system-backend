@@ -1,7 +1,9 @@
 package com.maliha.communitymanagement.service;
 
+import com.maliha.communitymanagement.entity.CommentEntity;
 import com.maliha.communitymanagement.entity.CommunityEntity;
 import com.maliha.communitymanagement.entity.PostEntity;
+import com.maliha.communitymanagement.model.CommentDTO;
 import com.maliha.communitymanagement.model.CommunityDTO;
 import com.maliha.communitymanagement.model.PatientFeignDTO;
 import com.maliha.communitymanagement.model.PostDTO;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommunityService {
@@ -45,20 +46,38 @@ public class CommunityService {
         }
         return communityDTOList;
     }
-    public CommunityEntity getCommunityById(Long id){
-        return communityRepository.findById(id).orElseThrow(() -> new NullPointerException());
+    public CommunityEntity getCommunityById(Long id)throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        Integer patientId=patientFeignClient.getPatientByEmail(userEmail).getId();
+        if(communityRepository.findById(id).get().getMemberId().isEmpty()){
+            throw  new Exception("Not a member of the community");
+
+        }
+        else if (communityRepository.findById(id).get().getMemberId().contains(patientId)){
+            return communityRepository.findById(id).orElseThrow(() -> new NullPointerException());
+        }
+        throw new Exception("Not a member of the community");
     }
     public Boolean joinCommunity(Long communityId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
         Integer patientId=patientFeignClient.getPatientByEmail(userEmail).getId();
+        List<Integer> patientIdList=new ArrayList<>();
+        patientIdList.add(patientId);
         if (communityRepository.existsById(communityId)){
-            if(communityRepository.findById(communityId).get().getMemberId().contains(patientId)){
+            CommunityEntity communityEntity=communityRepository.findById(communityId).get();
+            if(communityEntity.getMemberId()==null){
+                communityEntity.setMemberId(patientIdList);
+                communityRepository.save(communityEntity);
+                return true;
+            }
+            else if(communityEntity.getMemberId().contains(patientId)) {
                 return false;
             }
-            else {
+            else if (!communityEntity.getMemberId().isEmpty()){
                 communityRepository.findById(communityId).get().getMemberId().add(patientId);
-                return true;
+                communityRepository.save(communityEntity);
             }
         }
         return false;
@@ -72,12 +91,46 @@ public class CommunityService {
             PostEntity postEntity = new PostEntity();
             postEntity.setContent(postDTO.getContent());
             postEntity.setMemberId(patientFeignDTO.getId());
-            postEntity.setName(patientFeignDTO.getName());
+            postEntity.setMemberName(patientFeignDTO.getName());
             communityEntity.getPostEntities().add(postEntity);
             communityRepository.save(communityEntity);
             return postRepository.save(postEntity);
         }
         throw  new Exception("Not a member of the community");
     }
+    public List<PostEntity> getAllPost(Long communityId) throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        PatientFeignDTO patientFeignDTO=patientFeignClient.getPatientByEmail(userEmail);
+        CommunityEntity communityEntity=communityRepository.findById(communityId).orElseThrow(() -> new NullPointerException());
+        if (communityEntity.getMemberId().contains(patientFeignDTO.getId())) {
+            return communityEntity.getPostEntities();
+        }
+        throw  new Exception("Not a member of the community");
+    }
+    public PostEntity createComment(Long postId, CommentDTO commentDTO)throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        PatientFeignDTO patientFeignDTO=patientFeignClient.getPatientByEmail(userEmail);
+        PostEntity postEntity=postRepository.findById(postId).orElseThrow(() -> new NullPointerException());
+        CommentEntity commentEntity=new CommentEntity();
+        commentEntity.setContent(commentDTO.getContent());
+        commentEntity.setMemberId(patientFeignDTO.getId());
+        commentEntity.setMemberName(patientFeignDTO.getName());
+        List<CommentEntity> commentEntities=new ArrayList<>();
+        CommentEntity savedComment=commentRepository.save(commentEntity);
+        commentEntities.add(savedComment);
+        if (postEntity.getCommentEntityList().isEmpty()){
+            postEntity.setCommentEntityList(commentEntities);
+        }
+        else {
+            postEntity.getCommentEntityList().add(savedComment);
+        }
+        return postEntity;
+    }
+    //remove member
+    //delete post
+    //update community
+
 
 }

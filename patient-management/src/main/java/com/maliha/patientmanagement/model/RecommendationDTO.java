@@ -11,6 +11,6 @@ import java.util.List;
 public class RecommendationDTO {
     private List<String> medicine;
     private List<String> doctorName;
-    private String treatmentPlan;
-    private String recommendation;
+    private List<String> treatmentPlan;
+    private List<String> recommendation;
 }
