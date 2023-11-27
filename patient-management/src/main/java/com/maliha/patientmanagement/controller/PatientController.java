@@ -39,8 +39,8 @@ public class PatientController {
         return new ResponseEntity<>(patientService.getAllPatient(),HttpStatus.ACCEPTED);
     }
     @GetMapping("/all/health-record")
-    public ResponseEntity<?> getAllPatientHealthRecord(){
-        return new ResponseEntity<>(patientService.getAllHealthRecord(),HttpStatus.ACCEPTED);
+    public List<HealthRecordViewDTO> getAllPatientHealthRecord(){
+        return patientService.getAllHealthRecord();
     }
     @GetMapping("/{patientId}/health-record")
     public ResponseEntity<?> getPatientHealthRecordById(@PathVariable Integer patientId)throws Exception{
@@ -73,5 +73,9 @@ public class PatientController {
     @PutMapping("/update/health-record")
     public ResponseEntity<?> updateHealthRecord(@RequestBody HealthRecordDTO healthRecordDTO) throws Exception{
         return new ResponseEntity<>(patientService.updateHealthRecord(healthRecordDTO),HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/count")
+    public ResponseEntity<?> getPatientCount(){
+        return new ResponseEntity<>(patientService.getCount(),HttpStatus.ACCEPTED);
     }
 }

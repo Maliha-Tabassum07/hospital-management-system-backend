@@ -99,6 +99,12 @@ public class MedicineService {
         else if (symptomRepository.existsByName(input)){
             return getAllBySymptomName(input);
         }
+        else if (medicineRepository.existsByMedicineType(input)){
+            return medicineRepository.findAllByMedicineType(input);
+        }
+        else if (medicineRepository.existsByManufacturer(input)){
+            return medicineRepository.findAllByManufacturer(input);
+        }
         throw new Exception("Wrong Input");
     }
 

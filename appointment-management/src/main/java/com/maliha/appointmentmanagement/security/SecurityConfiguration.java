@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/appointment/schedule/create","/appointment/{bookingId}/makeAvailable/byBookingId","/appointment/{slotId}/makeUnavailable","/appointment/{slotId}/makeAvailable/bySlotId").hasAuthority("DOCTOR")
-                        .requestMatchers("/appointment/schedule/all").hasAuthority("ADMIN")
+                        .requestMatchers("/appointment/schedule/all","/appointment/slot/all").hasAuthority("ADMIN")
                         .requestMatchers("/appointment/{doctorId}/slot/get","/appointment/{doctorId}/schedule/get").hasAnyAuthority("PATIENT","ADMIN","DOCTOR")
                         .requestMatchers("/appointment/{slotId}/book","/appointment/{bookingId}/cancel").hasAuthority("PATIENT")
                         .anyRequest().authenticated()

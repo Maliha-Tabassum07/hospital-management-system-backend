@@ -149,10 +149,13 @@ public class PatientService implements UserDetailsService {
         }
       return patientViewDTOList;
     }
-    public List<HealthRecordDTO> getAllHealthRecord(){
-        List<HealthRecordDTO> healthRecordDTOList=new ArrayList<>();
+    public List<HealthRecordViewDTO> getAllHealthRecord(){
+        List<HealthRecordViewDTO> healthRecordDTOList=new ArrayList<>();
+        HealthRecordViewDTO healthRecordViewDTO=new HealthRecordViewDTO();
         for(HealthRecordEntity healthRecordEntity:healthRecordRepository.findAll()){
-            healthRecordDTOList.add(new ModelMapper().map(healthRecordEntity,HealthRecordDTO.class));
+            healthRecordViewDTO=new ModelMapper().map(healthRecordEntity,HealthRecordViewDTO.class);
+            healthRecordViewDTO.setSpecialId(patientRepository.findById(healthRecordEntity.getId()).get().getSpecialId());
+            healthRecordDTOList.add(healthRecordViewDTO);
         }
         return healthRecordDTOList;
     }
@@ -180,6 +183,9 @@ public class PatientService implements UserDetailsService {
             return new ModelMapper().map(patientRepository.findById(id).get(),PatientViewDTO.class);
         }
         throw new Exception("Patient doesn't exist");
+    }
+    public long getCount() {
+        return patientRepository.count();
     }
     public HealthRecordViewDTO getSelfHealthRecord()throws Exception{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

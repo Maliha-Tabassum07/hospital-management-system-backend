@@ -75,7 +75,12 @@ public class DoctorAppointmentService {
     public List<AppointmentSlotEntity> getAllAppointmentSlot(Integer doctorId) {
         return appointmentSlotRepository.findAllByDoctorId(doctorId);
     }
-
+    public List<AppointmentSlotEntity> getAllAppointmentSlot() {
+        return appointmentSlotRepository.findAll();
+    }
+    public List<AppointmentScheduleEntity> getAppointmentSchedule(){
+        return appointmentScheduleRepository.findAll();
+    }
     public Boolean bookSlot(Long slotId)throws Exception{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();

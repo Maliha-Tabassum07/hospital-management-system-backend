@@ -50,4 +50,12 @@ public class DoctorAppointmentController {
     public ResponseEntity<?> appointmentBookedByPatientId() throws Exception{
         return new ResponseEntity<>(doctorAppointmentService.findAllByPatientId(),HttpStatus.ACCEPTED);
     }
+    @GetMapping("/schedule/all")
+    public ResponseEntity<?> getAllSchedule() throws Exception{
+        return new ResponseEntity<>(doctorAppointmentService.getAppointmentSchedule(),HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/slot/all")
+    public ResponseEntity<?> getAllSlot() throws Exception{
+        return new ResponseEntity<>(doctorAppointmentService.getAllAppointmentSlot(),HttpStatus.ACCEPTED);
+    }
 }

@@ -12,9 +12,13 @@ public interface MedicineRepository extends JpaRepository<MedicineEntity, Intege
     List<MedicineEntity> findAllBySymptom(SymptomEntity symptomEntity);
     Optional<MedicineEntity> findBySpecialId(String specialId);
     Boolean existsBySpecialId(String specialId);
+    Boolean existsByMedicineType(String specialId);
     Boolean existsByGenericName(String genericName);
     Boolean existsByMedicineName(String medicineName);
+    Boolean existsByManufacturer(String manufacturer);
     List<MedicineEntity> findAllByGenericName(String genericName);
+    List<MedicineEntity> findAllByMedicineType(String medicineType);
     List<MedicineEntity> findAllByMedicineName(String medicineName);
+    List<MedicineEntity> findAllByManufacturer(String manufacturer);
     List<MedicineEntity> findAllBySpecialId(String specialId);
 }
