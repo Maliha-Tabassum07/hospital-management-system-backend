@@ -53,6 +53,10 @@ public class DoctorController {
     public ResponseEntity<?> getDoctorByDepartmentName(@PathVariable String departmentName) throws Exception{
         return new ResponseEntity<>(doctorService.getAllDoctorByDepartmentName(departmentName),HttpStatus.ACCEPTED);
     }
+    @GetMapping("/{doctorId}/get")
+    public ResponseEntity<?> getDoctorById(@PathVariable Integer doctorId) throws Exception{
+        return new ResponseEntity<>(doctorService.getDoctorById(doctorId),HttpStatus.ACCEPTED);
+    }
     @PutMapping("/update")
     public ResponseEntity<?> updateDoctorProfile(@RequestBody DoctorDTO doctorDTO) throws Exception{
         return new ResponseEntity<>(doctorService.updateDoctor(doctorDTO),HttpStatus.ACCEPTED);

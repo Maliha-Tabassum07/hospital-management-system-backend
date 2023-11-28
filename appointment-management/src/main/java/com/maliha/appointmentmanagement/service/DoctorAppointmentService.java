@@ -87,16 +87,18 @@ public class DoctorAppointmentService {
         System.out.println(userEmail);
         Integer patientId=patientFeignClient.getPatientByEmail(userEmail).getId();
         AppointmentSlotEntity appointmentSlotEntity=appointmentSlotRepository.findById(slotId).orElseThrow(() -> new Exception());
-        if (appointmentSlotRepository.existsById(slotId)&& appointmentSlotEntity.getStatus().equals("AVAILABLE")){
-        AppointmentBookingEntity appointmentBookingEntity=new AppointmentBookingEntity();
-        appointmentBookingEntity.setPatientId(patientId);
-        appointmentBookingEntity.setCompletion(false);
-        appointmentBookingEntity.setBookingDate(LocalDate.now());
-            appointmentBookingEntity.setAppointmentSlotEntity(appointmentSlotRepository.findById(slotId).orElseThrow(() -> new Exception()));
-            appointmentBookingRepository.save(appointmentBookingEntity);
-            appointmentSlotEntity.setStatus("BOOKED");
-            appointmentSlotRepository.save(appointmentSlotEntity);
-            return true;
+        if (appointmentSlotRepository.existsById(slotId)&& appointmentSlotEntity.getStatus().equals("AVAILABLE")) {
+            if (!appointmentBookingRepository.existsByPatientIdAndCompletion(patientId, false)) {
+                AppointmentBookingEntity appointmentBookingEntity = new AppointmentBookingEntity();
+                appointmentBookingEntity.setPatientId(patientId);
+                appointmentBookingEntity.setCompletion(false);
+                appointmentBookingEntity.setBookingDate(LocalDate.now());
+                appointmentBookingEntity.setAppointmentSlotEntity(appointmentSlotRepository.findById(slotId).orElseThrow(() -> new Exception()));
+                appointmentBookingRepository.save(appointmentBookingEntity);
+                appointmentSlotEntity.setStatus("BOOKED");
+                appointmentSlotRepository.save(appointmentSlotEntity);
+                return true;
+            }
         }
         return false;
     }
@@ -139,7 +141,21 @@ public class DoctorAppointmentService {
             appointmentSlotRepository.save(appointmentSlotEntity);
             return true;
         }
+        else if (appointmentSlotEntity.getStatus().equals("BOOKED") && appointmentSlotEntity.getDoctorId()==doctorId ){
+            appointmentSlotEntity.setStatus("AVAILABLE");
+            AppointmentBookingEntity appointmentBookingEntity=appointmentBookingRepository.findByAppointmentSlotEntityAndCompletion(appointmentSlotEntity,false);
+            appointmentBookingEntity.setCompletion(true);
+            appointmentBookingRepository.save(appointmentBookingEntity);
+            appointmentSlotRepository.save(appointmentSlotEntity);
+            return true;
+        }
         return false;
+    }
+    public List<AppointmentSlotEntity> findBookedSlots()throws Exception{
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        Integer doctorId=doctorFeignClient.getDoctorByEmail(userEmail).getId();
+        return appointmentSlotRepository.findAllByDoctorIdAndStatus(doctorId,"BOOKED");
     }
     public Boolean makeSlotUnavailable(Long slotId)throws Exception{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -9,4 +9,6 @@ import java.util.List;
 public interface AppointmentBookingRepository extends JpaRepository<AppointmentBookingEntity,Long> {
     List<AppointmentBookingEntity> findAllByAppointmentSlotEntity(AppointmentSlotEntity appointmentSlotEntity);
     List<AppointmentBookingEntity> findAllByPatientId(Integer patientId);
+    Boolean existsByPatientIdAndCompletion(Integer patientId,Boolean completion);
+    AppointmentBookingEntity findByAppointmentSlotEntityAndCompletion(AppointmentSlotEntity appointmentSlotEntity, Boolean completion);
 }

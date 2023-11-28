@@ -2,6 +2,7 @@ package com.maliha.pharmacymanagement.service;
 
 import com.maliha.pharmacymanagement.entity.MedicineEntity;
 import com.maliha.pharmacymanagement.entity.SymptomEntity;
+import com.maliha.pharmacymanagement.exception.CustomException;
 import com.maliha.pharmacymanagement.model.MedicineDTO;
 import com.maliha.pharmacymanagement.repository.MedicineRepository;
 import com.maliha.pharmacymanagement.repository.SymptomRepository;
@@ -20,7 +21,7 @@ public class MedicineService {
     private SymptomRepository symptomRepository;
     public MedicineEntity createMedicine(MedicineDTO medicineDTO) throws Exception {
         if(medicineRepository.findByMedicineName(medicineDTO.getMedicineName()).isPresent())
-            throw new Exception("Record already exists");
+            throw new CustomException("Record already exists");
         MedicineEntity medicineEntity = new MedicineEntity();
         medicineEntity.setMedicineName(medicineDTO.getMedicineName());
         medicineEntity.setGenericName(medicineDTO.getGenericName());
@@ -64,7 +65,7 @@ public class MedicineService {
     }
 
     public MedicineEntity updateMedicine(MedicineDTO medicineDTO,Integer id) throws Exception{
-        MedicineEntity medicineEntity=medicineRepository.findById(id).orElseThrow(() -> new NullPointerException());
+        MedicineEntity medicineEntity=medicineRepository.findById(id).orElseThrow(() -> new CustomException("Not found"));
         medicineEntity.setMedicineName(medicineDTO.getMedicineName());
         medicineEntity.setGenericName(medicineDTO.getGenericName());
         medicineEntity.setMedicineType(medicineDTO.getMedicineType());
@@ -105,7 +106,7 @@ public class MedicineService {
         else if (medicineRepository.existsByManufacturer(input)){
             return medicineRepository.findAllByManufacturer(input);
         }
-        throw new Exception("Wrong Input");
+        throw new CustomException("Wrong Input");
     }
 
 

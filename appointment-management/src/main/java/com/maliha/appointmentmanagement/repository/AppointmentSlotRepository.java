@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface AppointmentSlotRepository extends JpaRepository<AppointmentSlotEntity,Long> {
     List<AppointmentSlotEntity> findAllByDoctorId(Integer doctorId);
+    List<AppointmentSlotEntity> findAllByDoctorIdAndStatus(Integer doctorId,String status);
+
 }

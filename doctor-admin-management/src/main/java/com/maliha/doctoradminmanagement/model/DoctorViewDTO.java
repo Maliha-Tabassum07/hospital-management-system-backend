@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class DoctorViewDTO {
     private String specialId;
+    private Integer id;
     private String name;
     private String imageUrl;
     private String qualification;

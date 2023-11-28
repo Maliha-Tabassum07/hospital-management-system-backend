@@ -33,7 +33,7 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/doctor/login","/department/all","/department/{departmentId}/get").permitAll()
+                        .requestMatchers("/doctor/login","/department/all","/department/{departmentId}/get","/doctor/{doctorId}/get").permitAll()
                         .requestMatchers("/doctor/{departmentId}/all","/doctor/all","/doctor/{input}/search").permitAll()
                         .requestMatchers("/doctor/{departmentName}/departmentName/get","/doctor/{designationName}/designationName/get","/doctor/{designationId}/designationId/get").permitAll()
                         .requestMatchers("/doctor/register","/department/populate","/designation/populate").hasAuthority("ADMIN")

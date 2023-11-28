@@ -2,6 +2,7 @@ package com.maliha.patientmanagement.service;
 
 import com.maliha.patientmanagement.entity.HealthRecordEntity;
 import com.maliha.patientmanagement.entity.PatientEntity;
+import com.maliha.patientmanagement.exception.CustomException;
 import com.maliha.patientmanagement.model.*;
 import com.maliha.patientmanagement.networkmanager.DoctorFeignClient;
 import com.maliha.patientmanagement.networkmanager.MedicineFeignClient;
@@ -173,7 +174,7 @@ public class PatientService implements UserDetailsService {
         if(patientRepository.existsById(id)){
             return new ModelMapper().map(patientRepository.findById(id).get(),PatientViewDTO.class);
         }
-        throw new Exception("Patient doesn't exist");
+        throw new CustomException("Patient doesn't exist");
     }
     public PatientViewDTO getSelfInfo()throws Exception{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -206,39 +207,40 @@ public class PatientService implements UserDetailsService {
     public RecommendationDTO getRecommendation()throws Exception{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Optional<PatientEntity> patientEntity = patientRepository.findByEmail(authentication.getName());
-        Integer id = patientEntity.orElseThrow(() -> new Exception()).getId();
+        Integer id = patientEntity.orElseThrow(() -> new CustomException("Patient Not found")).getId();
         RecommendationDTO recommendationDTO=new RecommendationDTO();
         HealthRecordEntity healthRecordEntity=healthRecordRepository.findById(id).orElseThrow(() -> new Exception());
         if(healthRecordEntity.getBloodPressure().equals("HIGH")){
             recommendationDTO.setDoctorName(doctorFeignClient.getAllDoctorByDepartmentId(1l));
             List<String> recommendationList=new ArrayList<>();
-            recommendationList.add("Your blood pressure is high. Avoid fatty food");
+            recommendationList.add(" < Your blood pressure is high. Avoid fatty food. > ");
             recommendationDTO.setRecommendation(recommendationList);
             recommendationDTO.setMedicine(medicineFeignClient.getAllMedicineBySymptomId(4l));
+            recommendationDTO.getMedicine().add(", ");
             List<String> treatmentPlan=new ArrayList<>();
-            treatmentPlan.add(" You need treatment for high blood pressure");
+            treatmentPlan.add(" < You need treatment for high blood pressure > ");
             recommendationDTO.setTreatmentPlan(treatmentPlan);
             if (healthRecordEntity.getBloodSugarLevel()>=7.5){
                 for (String doctorName:doctorFeignClient.getAllDoctorByDepartmentId(5l)){
                     recommendationDTO.getDoctorName().add(doctorName);
                 }
-                recommendationList.add(" Your blood sugar level is high. Avoid sugary food and consume less carbohydrate ");
+                recommendationList.add(" < Your blood sugar level is high. Avoid sugary food and consume less carbohydrate > ");
                 recommendationDTO.setRecommendation(recommendationList);
                 for (String medicineName:medicineFeignClient.getAllMedicineBySymptomId(5l)){
-                    recommendationDTO.getMedicine().add(medicineName);
+                    recommendationDTO.getMedicine().add(medicineName+",  ");
                 }
-                treatmentPlan.add("You need checkup for diabetes");
+                treatmentPlan.add("< You need checkup for diabetes >");
                 recommendationDTO.setTreatmentPlan(treatmentPlan);
                 if (healthRecordEntity.getAllergy()){
                     for (String doctorName:doctorFeignClient.getAllDoctorByDepartmentId(4l)){
                         recommendationDTO.getDoctorName().add(doctorName);
                     }
-                    recommendationList.add(" As you have allergy avoid foods like prawn, eggplant or red meats" );
+                    recommendationList.add("< As you have allergy avoid foods like prawn, eggplant or red meats >" );
                     recommendationDTO.setRecommendation(recommendationList);
                     for (String medicineName:medicineFeignClient.getAllMedicineBySymptomId(7l)){
-                        recommendationDTO.getMedicine().add(medicineName);
+                        recommendationDTO.getMedicine().add(medicineName+",  ");
                     }
-                    treatmentPlan.add("You can visit our dermatologists for more detailed consultation");
+                    treatmentPlan.add("< You can visit our dermatologists for more detailed consultation >");
                     recommendationDTO.setTreatmentPlan(treatmentPlan);
                 }
             }else {
@@ -246,12 +248,12 @@ public class PatientService implements UserDetailsService {
                     for (String doctorName:doctorFeignClient.getAllDoctorByDepartmentId(4l)){
                         recommendationDTO.getDoctorName().add(doctorName);
                     }
-                    recommendationList.add(" As you have allergy avoid foods like prawn, eggplant or red meats" );
+                    recommendationList.add("< As you have allergy avoid foods like prawn, eggplant or red meats >" );
                     recommendationDTO.setRecommendation(recommendationList);
                     for (String medicineName:medicineFeignClient.getAllMedicineBySymptomId(7l)){
-                        recommendationDTO.getMedicine().add(medicineName);
+                        recommendationDTO.getMedicine().add(medicineName+ ",  ");
                     }
-                    treatmentPlan.add("You can visit our dermatologists for more detailed consultation");
+                    treatmentPlan.add("< You can visit our dermatologists for more detailed consultation >");
                     recommendationDTO.setTreatmentPlan(treatmentPlan);
                 }
             }
@@ -260,33 +262,34 @@ public class PatientService implements UserDetailsService {
             if (healthRecordEntity.getBloodSugarLevel()>=7.5){
                 recommendationDTO.setDoctorName(doctorFeignClient.getAllDoctorByDepartmentId(5l));
                 List<String> recommendationList=new ArrayList<>();
-                recommendationList.add(" Your blood sugar level is high. Avoid sugary food and consume less carbohydrate ");
+                recommendationList.add("< Your blood sugar level is high. Avoid sugary food and consume less carbohydrate >");
                 recommendationDTO.setRecommendation(recommendationList);
                 recommendationDTO.setMedicine(medicineFeignClient.getAllMedicineBySymptomId(5l));
+                recommendationDTO.getMedicine().add(", ");
                 List<String> treatmentPlan=new ArrayList<>();
-                treatmentPlan.add("You need checkup for diabetes");
+                treatmentPlan.add("< You need checkup for diabetes >");
                 recommendationDTO.setTreatmentPlan(treatmentPlan);
                 if (healthRecordEntity.getAllergy()){
                     for (String doctorName:doctorFeignClient.getAllDoctorByDepartmentId(4l)){
                         recommendationDTO.getDoctorName().add(doctorName);
                     }
-                    recommendationList.add(" As you have allergy avoid foods like prawn, eggplant or red meats" );
+                    recommendationList.add("< As you have allergy avoid foods like prawn, eggplant or red meats >" );
                     recommendationDTO.setRecommendation(recommendationList);
                     for (String medicineName:medicineFeignClient.getAllMedicineBySymptomId(7l)){
-                        recommendationDTO.getMedicine().add(medicineName);
+                        recommendationDTO.getMedicine().add(medicineName+ ", ");
                     }
-                    treatmentPlan.add("You can visit our dermatologists for more detailed consultation");
+                    treatmentPlan.add("< You can visit our dermatologists for more detailed consultation >");
                     recommendationDTO.setTreatmentPlan(treatmentPlan);
                 }
             }else {
                 if (healthRecordEntity.getAllergy()){
                     recommendationDTO.setDoctorName(doctorFeignClient.getAllDoctorByDepartmentId(4l));
                     List<String> recommendationList=new ArrayList<>();
-                    recommendationList.add(" As you have allergy avoid foods like prawn, eggplant or red meats");
+                    recommendationList.add("< As you have allergy avoid foods like prawn, eggplant or red meats >");
                     recommendationDTO.setRecommendation(recommendationList);
                     recommendationDTO.setMedicine(medicineFeignClient.getAllMedicineBySymptomId(7l));
                     List<String> treatmentPlan=new ArrayList<>();
-                    treatmentPlan.add("You can visit our dermatologists for more detailed consultation");
+                    treatmentPlan.add("< You can visit our dermatologists for more detailed consultation > ");
                     recommendationDTO.setTreatmentPlan(treatmentPlan);
                 }
                 else {

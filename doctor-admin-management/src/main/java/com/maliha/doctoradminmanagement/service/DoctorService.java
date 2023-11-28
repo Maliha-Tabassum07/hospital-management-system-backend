@@ -103,8 +103,17 @@ public class DoctorService implements UserDetailsService {
                 true, true, true, true,
                 roles);
     }
-    public DoctorEntity getDoctorBySpecialId(String id) throws Exception{
-        return doctorRepository.findBySpecialId(id).orElseThrow(() -> new Exception());
+    public DoctorViewDTO getDoctorById(Integer id) throws Exception{
+        DoctorEntity doctorEntity = doctorRepository.findById(id).orElseThrow(() -> new Exception());
+        DoctorViewDTO doctorViewDTO = new ModelMapper().map(doctorEntity, DoctorViewDTO.class);
+        List<String> specialtyList=new ArrayList<>();
+        for (DepartmentEntity departmentEntity:doctorEntity.getSpecialty()){
+            specialtyList.add(departmentEntity.getName());
+        }
+        doctorViewDTO.setDepartmentDTO(new ModelMapper().map(doctorEntity.getDepartment(), DepartmentDTO.class));
+        doctorViewDTO.setDesignationDTO(new ModelMapper().map(doctorEntity.getDesignation(), DesignationDTO.class));
+        doctorViewDTO.setSpecialtyList(specialtyList);
+        return doctorViewDTO;
     }
     public DoctorEntity getDoctorByName(String name) throws Exception{
         return doctorRepository.findByName(name).orElseThrow(() -> new Exception());
