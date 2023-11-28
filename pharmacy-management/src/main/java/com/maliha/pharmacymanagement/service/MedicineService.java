@@ -51,7 +51,7 @@ public class MedicineService {
         return medicineName;
     }
     public List<MedicineEntity> getAllBySymptomName(String symptomName) throws Exception {
-        return medicineRepository.findAllBySymptom(symptomRepository.findByName(symptomName).orElseThrow(() -> new Exception()));
+        return medicineRepository.findAllBySymptom(symptomRepository.findByName(symptomName).orElseThrow(() -> new CustomException("Wrong Input")));
     }
     public MedicineEntity getByName(String medicineName) throws Exception {
         return medicineRepository.findByMedicineName(medicineName).orElseThrow(() -> new Exception());

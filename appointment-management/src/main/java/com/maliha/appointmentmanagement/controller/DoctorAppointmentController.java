@@ -58,4 +58,8 @@ public class DoctorAppointmentController {
     public ResponseEntity<?> getAllSlot() throws Exception{
         return new ResponseEntity<>(doctorAppointmentService.getAllAppointmentSlot(),HttpStatus.ACCEPTED);
     }
+    @GetMapping("/slot/booked")
+    public ResponseEntity<?> getAllSlotBooked() throws Exception{
+        return new ResponseEntity<>(doctorAppointmentService.findBookedSlots(),HttpStatus.ACCEPTED);
+    }
 }

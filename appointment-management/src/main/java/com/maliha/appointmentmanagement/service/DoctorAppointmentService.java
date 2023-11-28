@@ -3,6 +3,7 @@ package com.maliha.appointmentmanagement.service;
 import com.maliha.appointmentmanagement.entity.AppointmentBookingEntity;
 import com.maliha.appointmentmanagement.entity.AppointmentScheduleEntity;
 import com.maliha.appointmentmanagement.entity.AppointmentSlotEntity;
+import com.maliha.appointmentmanagement.exception.CustomException;
 import com.maliha.appointmentmanagement.model.AppointmentScheduleDTO;
 import com.maliha.appointmentmanagement.networkmanager.DoctorFeignClient;
 import com.maliha.appointmentmanagement.networkmanager.PatientFeignClient;
@@ -67,7 +68,7 @@ public class DoctorAppointmentService {
                 return new ModelMapper().map(appointmentScheduleRepository.save(appointmentScheduleEntity), AppointmentScheduleDTO.class);
             }
         }
-        throw new Exception();
+        throw new CustomException("Action not possible");
     }
     public AppointmentScheduleDTO getAppointmentSchedule(Integer doctorId){
         return new ModelMapper().map(appointmentScheduleRepository.findByDoctorId(doctorId),AppointmentScheduleDTO.class);

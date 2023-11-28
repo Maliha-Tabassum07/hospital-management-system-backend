@@ -93,8 +93,9 @@ public class CommunityService {
             postEntity.setMemberId(patientFeignDTO.getId());
             postEntity.setMemberName(patientFeignDTO.getName());
             communityEntity.getPostEntities().add(postEntity);
+            PostEntity savedPostEntity = postRepository.save(postEntity);
             communityRepository.save(communityEntity);
-            return postRepository.save(postEntity);
+            return savedPostEntity;
         }
         throw  new Exception("Not a member of the community");
     }
@@ -122,9 +123,11 @@ public class CommunityService {
         commentEntities.add(savedComment);
         if (postEntity.getCommentEntityList().isEmpty()){
             postEntity.setCommentEntityList(commentEntities);
+            postRepository.save(postEntity);
         }
         else {
             postEntity.getCommentEntityList().add(savedComment);
+            postRepository.save(postEntity);
         }
         return postEntity;
     }

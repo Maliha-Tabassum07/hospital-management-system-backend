@@ -3,6 +3,7 @@ package com.maliha.doctoradminmanagement.service;
 
 import com.maliha.doctoradminmanagement.entity.DepartmentEntity;
 import com.maliha.doctoradminmanagement.entity.DoctorEntity;
+import com.maliha.doctoradminmanagement.exception.CustomException;
 import com.maliha.doctoradminmanagement.model.*;
 import com.maliha.doctoradminmanagement.repository.DepartmentRepository;
 import com.maliha.doctoradminmanagement.repository.DesignationRepository;
@@ -104,7 +105,10 @@ public class DoctorService implements UserDetailsService {
                 roles);
     }
     public DoctorViewDTO getDoctorById(Integer id) throws Exception{
-        DoctorEntity doctorEntity = doctorRepository.findById(id).orElseThrow(() -> new Exception());
+        DoctorEntity doctorEntity = doctorRepository.findById(id).orElseThrow(() -> new CustomException("Not found"));
+        if(doctorEntity.getRole().equals("ADMIN")){
+            throw new CustomException("User is admin");
+        }
         DoctorViewDTO doctorViewDTO = new ModelMapper().map(doctorEntity, DoctorViewDTO.class);
         List<String> specialtyList=new ArrayList<>();
         for (DepartmentEntity departmentEntity:doctorEntity.getSpecialty()){
